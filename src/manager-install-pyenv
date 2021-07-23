@@ -21,6 +21,14 @@ echo "Installing PyEnv..."
 tar -xf pyenv.tar.gz && mv pyenv-master "${pyenv_root}"
 rm -f pyenv.tar.gz
 
+# Fixing missing double quotes for very ancient bash shells.
+echo "Patching PyEnv..."
+sed -i 's|\(.* =~ \)\((--with-tcltk-libs=.*)\)|\1"\2"|'                       \
+    ${pyenv_root}/plugins/python-build/bin/python-build
+sed -i 's|\(.* =~ \)\(\^.*\$\)\(.*\)|\1"\2"\3|'                       \
+    ${pyenv_root}/pyenv.d/exec/pip-rehash.bash
+echo "" > ${pyenv_root}/completions/pyenv.bash
+
 # Add PyEnv initialisation to profile.
 pyenv_profile="$(manager info pyenv-profile)"
 mkdir -p $(dirname ${pyenv_profile})
