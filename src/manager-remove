@@ -47,8 +47,16 @@ while [ $# -gt 0 ]; do
             pkgman=$(manager info os-package-manager)
             case ${pkgman} in
                 apt-get)
-                    remove="purge"
-                    autoremove="autoremove"
+                    remove="remove --purge"
+                    aptversion=$(apt-get --version | head -n1 | cut -d' ' -f2)
+                    case "${aptversion}" in
+                        0.[0-6].*)
+                            autoremove=
+                        ;;
+                        *)
+                            autoremove="autoremove"
+                        ;;
+                    esac
                 ;;
                 yum)
                     remove="remove"
@@ -66,6 +74,7 @@ while [ $# -gt 0 ]; do
             if [ ${repo_remove} -eq 0 ]; then
                 repo_remove=1
             fi
+            manager update
             ${pkgman} ${remove} -y ${pkglist}
             if [ ! -z ${autoremove} ]; then
                 ${pkgman} ${autoremove} -y

@@ -52,7 +52,15 @@ while [ $# -gt 0 ]; do
             pkgman=$(manager info os-package-manager)
             case ${pkgman} in
                 apt-get)
-                    norecommends=--no-install-recommends
+                    aptversion=$(apt-get --version | head -n1 | cut -d' ' -f2)
+                    case "${aptversion}" in
+                        0.[0-6].*)
+                            norecommends=
+                        ;;
+                        *)
+                            norecommends=--no-install-recommends
+                        ;;
+                    esac
                 ;;
                 zypper)
                     norecommends=--no-recommends
