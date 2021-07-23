@@ -42,7 +42,7 @@ rm -rf /var/log/*
 license_regex=".*/\(COPYING\|copyright\|LICEN[CS]E\|README\)*"
 find /usr/share/doc -type f -not -regex "${license_regex}" | xargs rm -rf
 find /usr/share/doc -type d | xargs rmdir -p 2>/dev/null | true
-rm -rf /usr/share/man/*
+find /usr/share/man -mindepth 2 -maxdepth 2 -type d | xargs rm -rf
 
 # Remove locales.
 rm -rf /usr/share/locale/*
