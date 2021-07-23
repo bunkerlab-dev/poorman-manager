@@ -29,6 +29,12 @@ pkgname="openssl-${version}"
 pkgfile="${pkgname}.tar.gz"
 prefix=$(manager info openssl-root ${version})
 
+# Raise an error if `g++` is missing.
+if [ ! -x "$(command -v g++ || true)" ]; then
+    echo "E: Missing g++ in system"
+    exit 1
+fi
+
 # Install `make` if it is not available.
 delete_make=0
 if [ ! -x "$(command -v make || true)" ]; then
