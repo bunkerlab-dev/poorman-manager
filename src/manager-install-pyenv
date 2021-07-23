@@ -32,12 +32,18 @@ echo "" > ${pyenv_root}/completions/pyenv.bash
 # Add PyEnv initialisation to profile.
 pyenv_profile="$(manager info pyenv-profile)"
 mkdir -p $(dirname ${pyenv_profile})
-echo "Configuring PyEnv..."
-echo "# Enable PyEnv environment" > ${pyenv_profile}
-echo 'export PYENV_ROOT="'${pyenv_root}'"' >> ${pyenv_profile}
-echo 'export PATH="${PYENV_ROOT}/bin:$PATH"' >> ${pyenv_profile}
-echo 'eval "$(pyenv init --path)"' >> ${pyenv_profile}
-echo 'eval "$(pyenv init -)"' >> ${pyenv_profile}
-echo "" >> ${pyenv_profile}
+echo 'Configuring PyEnv...'
+{
+echo '# Ensure that source command exists.'
+echo 'if [ ! -x "$(command -v source || true)" ]; then'
+echo '    alias source=.'
+echo 'fi'
+echo '# Enable PyEnv environment.'
+echo 'export PYENV_ROOT="'${pyenv_root}'"'
+echo 'export PATH="${PYENV_ROOT}/bin:$PATH"'
+echo 'eval "$(pyenv init --path)"'
+echo 'eval "$(pyenv init -)"'
+echo ''
+} > ${pyenv_profile}
 
 echo "Done!"
