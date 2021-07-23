@@ -232,7 +232,7 @@ _info_pyenv_dev() {
     case "$(_info_os_name)-$(_info_os_version)" in
         debian-4.0)
             echo "
-                build-essential tk-dev libncursesw5-dev libreadline-dev       \
+                build-essential libncursesw5-dev libreadline-dev              \
                 libsqlite3-dev libffi-dev zlib1g-dev libbz2-dev               \
             " | xargs
         ;;
