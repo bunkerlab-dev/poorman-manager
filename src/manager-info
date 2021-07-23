@@ -273,6 +273,41 @@ _info_pyenv_root() {
 }
 
 
+_info_profile() {
+
+    echo \
+'# /etc/profile: system-wide .profile file for the Bourne shell (sh(1))
+# and Bourne compatible shells (bash(1), ksh(1), ash(1), ...).
+
+if [ "`id -u`" -eq 0 ]; then
+    PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+else
+    PATH="/usr/local/bin:/usr/bin:/bin"
+fi
+
+if [ "$PS1" ]; then
+    if [ "$BASH" ]; then
+        PS1='"'"'\u@\h:\w\$ '"'"'
+    elif [ "`id -u`" -eq 0 ]; then
+        PS1="[root@$HOSTNAME]# "
+    else
+        PS1="[$USER@$HOSTNAME]$ "
+    fi
+fi
+
+if [ -d /etc/profile.d ]; then
+    for i in /etc/profile.d/*.sh; do
+        if [ -r $i ]; then
+            . $i
+        fi
+    done
+    unset i
+fi
+'
+
+}
+
+
 case "$1" in
     blas|lapack|hdf4|hdf5|netcdf4|matplotlib-dev)
         _info_$(echo $1 | tr - _)
@@ -284,7 +319,7 @@ case "$1" in
         shift
         _info_openssl_root $@
     ;;
-    os-name|os-version|os-package-manager)
+    os-name|os-version|os-package-manager|profile)
         _info_$(echo $1 | tr - _)
     ;;
     pyenv-dev|pyenv-profile|pyenv-root)
