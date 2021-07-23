@@ -50,18 +50,21 @@ _info_os_package_manager() {
 
 
 _info_hdf4() {
-    case "$(_info_os_name)" in
-        ubuntu)
+    case "$(_info_os_name)-$(_info_os_version)" in
+        debian-4.0)
+            echo "libhdf4g libhdf4g-dev"
+        ;;
+        ubuntu-*)
             echo "libhdf4-0 libhdf4-dev"
         ;;
-        centos)
+        centos-*)
             echo "hdf hdf-devel"
         ;;
-        opensuse*|sles)
+        opensuse*-*|sles-*)
             echo "libhdf4 hdf-devel hdf-devel-static"
         ;;
         *)
-            echo "E:Unknown operating system '$(_info_os_name)'"
+            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
             exit 1
         ;;
     esac
@@ -69,18 +72,21 @@ _info_hdf4() {
 
 
 _info_hdf5() {
-    case "$(_info_os_name)" in
-        ubuntu)
+    case "$(_info_os_name)-$(_info_os_version)" in
+        debian-4.0)
+            echo "libhdf5-serial-1.6.5-0 libhdf5-serial-dev"
+        ;;
+        ubuntu-*)
             echo "libhdf5-103 libhdf5-dev"
         ;;
-        centos)
+        centos-*)
             echo "hdf5 hdf5-devel hdf5-static"
         ;;
-        opensuse*|sles)
+        opensuse*-*|sles-*)
             echo "libhdf5 hdf5-devel hdf5-devel-static"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)'"
+            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
             exit 1
         ;;
     esac
@@ -88,18 +94,21 @@ _info_hdf5() {
 
 
 _info_blas() {
-    case "$(_info_os_name)" in
-        ubuntu)
+    case "$(_info_os_name)-$(_info_os_version)" in
+        debian-4.0)
+            echo "refblas3 refblas3-dev"
+        ;;
+        ubuntu-*)
             echo "libblas3 libblas-dev"
         ;;
-        centos)
+        centos-*)
             echo "blas blas-devel blas-static"
         ;;
-        opensuse*|sles)
+        opensuse*-*|sles-*)
             echo "libblas3 blas-devel blas-devel-static"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)'"
+            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
             exit 1
         ;;
     esac
@@ -107,18 +116,21 @@ _info_blas() {
 
 
 _info_lapack() {
-    case "$(_info_os_name)" in
-        ubuntu)
+    case "$(_info_os_name)-$(_info_os_version)" in
+        debian-4.0)
+            echo "lapack3 lapack3-dev"
+        ;;
+        ubuntu-*)
             echo "liblapack3 liblapack-dev"
         ;;
-        centos)
+        centos-*)
             echo "lapack lapack-devel lapack-static"
         ;;
-        opensuse*|sles)
+        opensuse*-*|sles-*)
             echo "liblapack3 lapack-devel lapack-devel-static"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)'"
+            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
             exit 1
         ;;
     esac
@@ -126,18 +138,18 @@ _info_lapack() {
 
 
 _info_netcdf4() {
-    case "$(_info_os_name)" in
-        ubuntu)
+    case "$(_info_os_name)-$(_info_os_version)" in
+        ubuntu-*)
             echo "libnetcdf15 libnetcdf-dev"
         ;;
-        centos)
+        centos-*)
             echo "netcdf netcdf-devel netcdf-static"
         ;;
-        opensuse*|sles)
+        opensuse*-*|sles-*)
             echo "libnetcdf18 netcdf-devel netcdf-devel-static"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)'"
+            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
             exit 1
         ;;
     esac
@@ -145,18 +157,21 @@ _info_netcdf4() {
 
 
 _info_matplotlib_dev() {
-    case "$(_info_os_name)" in
-        ubuntu)
+    case "$(_info_os_name)-$(_info_os_version)" in
+        debian-4.0)
+            echo "libfreetype6-dev libpng12-dev"
+        ;;
+        ubuntu-*)
             echo "libfreetype-dev libpng-dev"
         ;;
-        centos)
+        centos-*)
             echo "freetype-devel libpng-devel"
         ;;
-        opensuse*|sles)
+        opensuse*-*|sles-*)
             echo "freetype-devel libpng16-devel"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)'"
+            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
             exit 1
         ;;
     esac
@@ -179,18 +194,18 @@ _info_openssl_root() {
 
 
 _info_gcc_full() {
-    case "$(_info_os_name)" in
-        ubuntu)
+    case "$(_info_os_name)-$(_info_os_version)" in
+        debian-4.0|ubuntu-*)
             echo "gcc g++ gfortran"
         ;;
-        centos)
+        centos-*)
             echo "gcc gcc-c++ gcc-gfortran"
         ;;
-        opensuse*|sles)
+        opensuse*-*|sles-*)
             echo "gcc gcc-c++ gcc-fortran"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)'"
+            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
             exit 1
         ;;
     esac
@@ -198,18 +213,15 @@ _info_gcc_full() {
 
 
 _info_pkg_config() {
-    case "$(_info_os_name)" in
-        ubuntu)
+    case "$(_info_os_name)-$(_info_os_version)" in
+        debian-4.0|ubuntu-*|opensuse*-*|sles-*)
             echo "pkg-config"
         ;;
-        centos)
+        centos-*)
             echo "pkgconfig"
         ;;
-        opensuse*|sles)
-            echo "pkg-config"
-        ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)'"
+            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
             exit 1
         ;;
     esac
@@ -217,28 +229,34 @@ _info_pkg_config() {
 
 
 _info_pyenv_dev() {
-    case "$(_info_os_name)" in
-        ubuntu)
+    case "$(_info_os_name)-$(_info_os_version)" in
+        debian-4.0)
+            echo "
+                build-essential tk-dev libncursesw5-dev libreadline-dev       \
+                libsqlite3-dev libffi-dev zlib1g-dev libbz2-dev               \
+            " | xargs
+        ;;
+        ubuntu-*)
             echo "
                 build-essential llvm tk-dev libncursesw5-dev libreadline-dev  \
                 libsqlite3-dev libffi-dev xz-utils zlib1g-dev libbz2-dev      \
                 liblzma-dev
             " | xargs
         ;;
-        centos)
+        centos-*)
             echo "
                 @development findutils llvm readline-devel sqlite-devel       \
                 libffi-devel xz-devel bzip2-devel zlib-devel
             " | xargs
         ;;
-        opensuse*|sles)
+        opensuse*-*|sles-*)
             echo "
                 automake tk-devel ncurses-devel readline-devel                \
                 sqlite3-devel libffi-devel xz-devel libbz2-devel zlib-devel
             " | xargs
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)'"
+            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
             exit 1
         ;;
     esac
