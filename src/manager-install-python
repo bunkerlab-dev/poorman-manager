@@ -52,7 +52,7 @@ fi
 case ${version} in
     2.[67]|3.[23456789])
         regex=$(echo "^\ \ ${version}.[0-9]\+$" | sed 's|\.|\\\.|g')
-        version=$(pyenv install --list | grep "${regex}" | tail -n1 | xargs)
+        version=$(pyenv install -l | grep "${regex}" | tail -n1 | xargs)
     ;;
 esac
 
