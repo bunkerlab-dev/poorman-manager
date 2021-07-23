@@ -20,6 +20,7 @@ case ${pkgman} in
         ${pkgman} autoclean
         rm -rf /var/cache/debconf/*-old
         rm -rf /var/lib/apt/lists/*
+        mkdir -p /var/lib/apt/lists/partial
     ;;
     yum)
         ${pkgman} clean all
