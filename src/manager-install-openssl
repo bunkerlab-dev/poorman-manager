@@ -29,6 +29,14 @@ pkgname="openssl-${version}"
 pkgfile="${pkgname}.tar.gz"
 prefix=$(manager info openssl-root ${version})
 
+# Install `make` if it is not available.
+delete_make=0
+if [ ! -x "$(command -v make || true)" ]; then
+    delete_make=1
+    echo "Installing make..."
+    manager install make 1>/dev/null 2>&1
+fi
+
 # Create temporary workspace.
 cwd="$(pwd)"
 tmpdir="$(mktemp -d)"
@@ -66,5 +74,10 @@ fi
 echo "Cleaning up..."
 rm -rf ${tmpdir}
 cd ${cwd}
+
+# Remove `make` if installed on the fly.
+if [ ${delete_make} -eq 1 ]; then
+    manager remove make
+fi
 
 echo "Done!"
