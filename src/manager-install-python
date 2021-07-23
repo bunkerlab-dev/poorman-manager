@@ -41,7 +41,11 @@ package_openssl=openssl-${version_openssl}
 pyenv_profile="$(manager info pyenv-profile)"
 if [ ! -d $(manager info pyenv-root) ]; then
     manager install pyenv
-    . ${pyenv_profile}
+fi
+
+# Ensure PyEnv is enabled.
+if [ ! -x "$(command -v pyenv || true)" ]; then
+    . "$(manager info pyenv-profile)"
 fi
 
 # Infer complete Python version if the user only gave major + minor.
