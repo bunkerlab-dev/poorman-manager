@@ -23,6 +23,7 @@ rm -f pyenv.tar.gz
 
 # Add PyEnv initialisation to profile.
 pyenv_profile="$(manager info pyenv-profile)"
+mkdir -p $(dirname ${pyenv_profile})
 echo "Configuring PyEnv..."
 echo "# Enable PyEnv environment" > ${pyenv_profile}
 echo 'export PYENV_ROOT="'${pyenv_root}'"' >> ${pyenv_profile}
