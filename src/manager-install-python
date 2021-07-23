@@ -16,7 +16,7 @@ version="$1"
 case ${version} in
     2.6|2.6.*)
         version_openssl=1.0.2
-        export GET_PIP_URL=https://gist.githubusercontent.com/molinav/3b4f623edc5793154a0bdd9a78e739e9/raw/3926f90838f68dd923e396040a4ceaa6535e6083/get-pip-py26.py
+        export GET_PIP_URL=http://molinav.net/hub/python/get-pip-pyopenssl.py
     ;;
     2.7|2.7.*)
         version_openssl=1.1.1
