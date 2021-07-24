@@ -51,7 +51,7 @@ _info_os_package_manager() {
 
 _info_hdf4() {
     case "$(_info_os_name)-$(_info_os_version)" in
-        debian-4.0)
+        debian-[45].0*)
             echo "libhdf4g libhdf4g-dev"
         ;;
         ubuntu-*)
@@ -73,8 +73,11 @@ _info_hdf4() {
 
 _info_hdf5() {
     case "$(_info_os_name)-$(_info_os_version)" in
-        debian-4.0)
+        debian-4.0*)
             echo "libhdf5-serial-1.6.5-0 libhdf5-serial-dev"
+        ;;
+        debian-5.0*)
+            echo "libhdf5-serial-1.6.6-0 libhdf5-serial-dev"
         ;;
         ubuntu-*)
             echo "libhdf5-103 libhdf5-dev"
@@ -95,8 +98,11 @@ _info_hdf5() {
 
 _info_blas() {
     case "$(_info_os_name)-$(_info_os_version)" in
-        debian-4.0)
+        debian-4.0*)
             echo "refblas3 refblas3-dev"
+        ;;
+        debian-5.0*)
+            echo "libblas3gf libblas-dev"
         ;;
         ubuntu-*)
             echo "libblas3 libblas-dev"
@@ -117,8 +123,11 @@ _info_blas() {
 
 _info_lapack() {
     case "$(_info_os_name)-$(_info_os_version)" in
-        debian-4.0)
+        debian-4.0*)
             echo "lapack3 lapack3-dev"
+        ;;
+        debian-5.0*)
+            echo "liblapack3gf liblapack-dev"
         ;;
         ubuntu-*)
             echo "liblapack3 liblapack-dev"
@@ -139,6 +148,9 @@ _info_lapack() {
 
 _info_netcdf4() {
     case "$(_info_os_name)-$(_info_os_version)" in
+        debian-5.0*)
+            echo "libnetcdf4 libnetcdf-dev"
+        ;;
         ubuntu-*)
             echo "libnetcdf15 libnetcdf-dev"
         ;;
@@ -158,7 +170,7 @@ _info_netcdf4() {
 
 _info_matplotlib_dev() {
     case "$(_info_os_name)-$(_info_os_version)" in
-        debian-4.0)
+        debian-[45].0*)
             echo "libfreetype6-dev libpng12-dev"
         ;;
         ubuntu-*)
@@ -195,7 +207,7 @@ _info_openssl_root() {
 
 _info_gcc_full() {
     case "$(_info_os_name)-$(_info_os_version)" in
-        debian-4.0|ubuntu-*)
+        debian-[45].0*|ubuntu-*)
             echo "gcc g++ gfortran"
         ;;
         centos-*)
@@ -214,7 +226,7 @@ _info_gcc_full() {
 
 _info_pkg_config() {
     case "$(_info_os_name)-$(_info_os_version)" in
-        debian-4.0|ubuntu-*|opensuse*-*|sles-*)
+        debian-[45].0*|ubuntu-*|opensuse*-*|sles-*)
             echo "pkg-config"
         ;;
         centos-*)
@@ -230,7 +242,7 @@ _info_pkg_config() {
 
 _info_pyenv_dev() {
     case "$(_info_os_name)-$(_info_os_version)" in
-        debian-4.0)
+        debian-[45].0*)
             echo "
                 build-essential libncursesw5-dev libreadline-dev              \
                 libsqlite3-dev libffi-dev zlib1g-dev libbz2-dev               \
