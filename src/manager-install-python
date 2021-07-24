@@ -22,7 +22,7 @@ case ${version} in
         version_openssl=1.1.1
         export GET_PIP_URL=
     ;;
-    3.[234]|3.2.*|3.3.*|3.4.*)
+    3.[234]|3.2.*|3.3.*|3.4.*|3.5.[012])
         version_openssl=1.0.2
         export GET_PIP_URL=
     ;;
