@@ -88,9 +88,11 @@ find "${pydir}" -type f -name "*.pyc" | xargs rm -rf
 find "${pydir}" -type f -name "*.pyo" | xargs rm -rf
 find "${pydir}/lib" -type d -name "__pycache__" | xargs rm -rf
 
-# Remove Python test stuff.
-find "${pydir}/lib" -type d -name "test" | xargs rm -rf
+# Remove Python testing stuff.
+find "${pydir}/lib" -type d -regex ".*/tests?" | xargs rm -rf
 rm -rf ${pydir}/lib/*/lib-dynload/_test*.so
+rm -rf ${pydir}/lib/*/lib-dynload/ctypes_test*.so
+rm -rf ${pydir}/lib/*/lib-dynload/xxtestfuzz*.so
 
 # Remove Python static stuff.
 find "${pydir}/lib" -type f -name "libpython*.a" | xargs rm -rf
