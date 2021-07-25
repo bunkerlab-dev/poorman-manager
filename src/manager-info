@@ -276,7 +276,7 @@ _info_pyenv_dev() {
 
 
 _info_pyenv_profile() {
-    echo /etc/profile.d/01-set-pyenv.sh
+    echo /etc/profile.d/01-pyenv-init.sh
 }
 
 

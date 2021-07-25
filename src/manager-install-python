@@ -80,7 +80,7 @@ manager enable ${package_openssl}
 export CFLAGS="-I/usr/local/ssl/include"
 export LDFLAGS="-L/usr/local/ssl/lib"
 PATH="/usr/local/ssl/bin/openssl:${PATH}" pyenv install "${version}"
-echo "pyenv shell ${version}" >> ${pyenv_profile}
+echo "pyenv shell ${version}" > /etc/profile.d/01-pyenv-shell
 
 # Remove Python byte-compiled files.
 pydir="$(manager info pyenv-root)/versions/${version}"
