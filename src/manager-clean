@@ -37,17 +37,3 @@ esac
 rm -rf /tmp/*
 rm -rf /var/tmp/*
 rm -rf /var/log/*/*
-
-# Remove docs if any.
-license_regex=".*/\(COPYING\|copyright\|LICEN[CS]E\|README\)*"
-find                                                                          \
-    /usr/share/doc                                                            \
-    -mindepth 1 -type f -not -regex "${license_regex}" | xargs rm -rf
-find                                                                          \
-    /usr/share/doc                                                            \
-    -type d -empty | xargs rm -rf
-
-# Clean locales and manpages.
-rm -rf /usr/share/locale/*
-rm -rf /usr/share/man/*
-rm -rf /var/cache/man
