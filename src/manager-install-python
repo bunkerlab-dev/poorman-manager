@@ -74,6 +74,7 @@ echo "pyenv shell ${version}" >> ${pyenv_profile}
 pydir="$(manager info pyenv-root)/versions/${version}"
 find "${pydir}" -type f -name "*.pyc" | xargs rm -rf
 find "${pydir}" -type f -name "*.pyo" | xargs rm -rf
+find "${pydir}/lib" -type d -name "__pycache__" | xargs rm -rf
 find "${pydir}/lib" -type f -name "libpython*.a" | xargs rm -rf
 find "${pydir}/lib" -type d -name "test" | xargs rm -rf
 
