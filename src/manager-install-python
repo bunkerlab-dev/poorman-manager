@@ -75,8 +75,17 @@ pydir="$(manager info pyenv-root)/versions/${version}"
 find "${pydir}" -type f -name "*.pyc" | xargs rm -rf
 find "${pydir}" -type f -name "*.pyo" | xargs rm -rf
 find "${pydir}/lib" -type d -name "__pycache__" | xargs rm -rf
-find "${pydir}/lib" -type f -name "libpython*.a" | xargs rm -rf
 find "${pydir}/lib" -type d -name "test" | xargs rm -rf
+
+# Remove Python static stuff.
+find "${pydir}/lib" -type f -name "libpython*.a" | xargs rm -rf
+rm -rf ${pydir}/lib/*/config-*
+
+# Remove IDLE.
+find "${pydir}/bin" -name "idle.*" | xargs rm -rf
+find "${pydir}/lib" -type d -name "idlelib" | xargs rm -rf
+find "${pydir}/lib" -type d -name "turtledemo" | xargs rm -rf
+rm -f ${pydir}/lib/*/turtle.py
 
 # Remove OpenSSL if installed on the fly.
 manager disable ${package_openssl}
