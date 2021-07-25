@@ -102,6 +102,10 @@ find "${pydir}/lib" -type d -name "idlelib" | xargs rm -rf
 find "${pydir}/lib" -type d -name "turtledemo" | xargs rm -rf
 rm -f ${pydir}/lib/*/turtle.py
 
+# Remove temporary folders.
+rm -rf /tmp/python-build*
+rm -rf /tmp/python-patch*
+
 # Remove OpenSSL if installed on the fly.
 manager disable ${package_openssl}
 if [ ${delete_openssl} -eq 1 ]; then
