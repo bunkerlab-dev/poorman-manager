@@ -19,8 +19,8 @@ case ${pkgman} in
         ${pkgman} clean
         ${pkgman} autoclean
         rm -rf /var/cache/debconf/*-old
-        rm -rf /var/lib/apt/lists/*
-        mkdir -p /var/lib/apt/lists/partial
+        find /var/cache/apt -type f | xargs rm -f
+        find /var/lib/apt/lists -type f | xargs rm -f
     ;;
     yum)
         ${pkgman} clean all
@@ -36,13 +36,18 @@ esac
 # Remove logs and temp files.
 rm -rf /tmp/*
 rm -rf /var/tmp/*
-rm -rf /var/log/*
+rm -rf /var/log/*/*
 
 # Remove docs if any.
 license_regex=".*/\(COPYING\|copyright\|LICEN[CS]E\|README\)*"
-find /usr/share/doc -type f -not -regex "${license_regex}" | xargs rm -rf
-find /usr/share/doc -type d | xargs rmdir -p 2>/dev/null | true
-find /usr/share/man -mindepth 2 -maxdepth 2 -type d | xargs rm -rf
+find                                                                          \
+    /usr/share/doc                                                            \
+    -mindepth 1 -type f -not -regex "${license_regex}" | xargs rm -rf
+find                                                                          \
+    /usr/share/doc                                                            \
+    -type d -empty | xargs rm -rf
 
-# Remove locales.
+# Clean locales and manpages.
 rm -rf /usr/share/locale/*
+rm -rf /usr/share/man/*
+rm -rf /var/cache/man
