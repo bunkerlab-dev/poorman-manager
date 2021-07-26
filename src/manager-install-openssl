@@ -57,10 +57,28 @@ wget -q ${remote}/${pkgfile}
 echo "Decompressing OpenSSL ${version}..."
 tar -xf ${pkgfile}
 
-echo "Configuring OpenSSL ${version}..."
+# Find out the architecture without relying on the kernel.
+arch=$(manager info os-arch)
+archopts=
+if [ "${arch}" = "amd64" ]; then
+    archopts="linux-generic64 -m64"
+elif [ "${arch}" = "i386" -o "${arch}" = "i686" ]; then
+    archopts="linux-generic32 -m32"
+fi
+
+# Now go to the config + make + make install.
+echo "Configuring OpenSSL ${version} (arch: ${arch})..."
 cd ${pkgname}
-./config -fPIC no-shared --prefix=${prefix}                                   \
-    --openssldir=${prefix}/ssl 1>${tmplog} 2>&1
+if [ ! -z "${archopts}" ]; then
+    ./Configure                                                               \
+        ${archopts}                                                           \
+        --prefix=${prefix} --openssldir=${prefix}/ssl                         \
+        -fPIC no-shared -Wa,--noexecstack 1>${tmplog} 2>&1
+else
+    ./config                                                                  \
+        --prefix=${prefix} --openssldir=${prefix}/ssl                         \
+        -fPIC no-shared -Wa,--noexecstack 1>${tmplog} 2>&1
+fi
 
 echo "Building OpenSSL ${version}..."
 make -s 1>>${tmplog} 2>&1
