@@ -25,9 +25,29 @@ rm -f pyenv.tar.gz
 echo "Patching PyEnv..."
 sed -i 's|\(.* =~ \)\((--with-tcltk-libs=.*)\)|\1"\2"|'                       \
     ${pyenv_root}/plugins/python-build/bin/python-build
-sed -i 's|\(.* =~ \)\(\^.*\$\)\(.*\)|\1"\2"\3|'                       \
+sed -i 's|\(.* =~ \)\(\^.*\$\)\(.*\)|\1"\2"\3|'                               \
     ${pyenv_root}/pyenv.d/exec/pip-rehash.bash
 echo "" > ${pyenv_root}/completions/pyenv.bash
+
+# Remove some unnecessary files.
+find ${pyenv_root}                                                            \
+    -name ".gitignore" | xargs rm -rf
+find ${pyenv_root}                                                            \
+    -mindepth 1 -maxdepth 1                                                   \
+    -not -regex ".*/\(LICEN[CS]E\)$"                                          \
+    -a -not -regex ".*/\(bin\|completions\|libexec\|plugins\|pyenv\.d\)$"     \
+    -a -not -regex ".*/\(shims\|versions\)$"                                  \
+    | xargs rm -rf
+find ${pyenv_root}/plugins/python-build                                       \
+    -mindepth 1 -maxdepth 1                                                   \
+    -not -regex ".*/\(LICEN[CS]E\)$"                                          \
+    -a -not -regex ".*/\(bin\|share\)$"                                       \
+    | xargs rm -rf
+find ${pyenv_root}/plugins/python-build/share/python-build                    \
+    -regex ".*/\(activepython\|anaconda\|graalpython\|ironpython\).*$"        \
+    -o -regex ".*/\(jython\|mambaforge\|micropython\|miniconda\).*"           \
+    -o -regex ".*/\(miniforge\|pypy\|pyston\|stackless\).*"                   \
+    | xargs rm -rf
 
 # Add PyEnv initialisation to profile.
 pyenv_profile="$(manager info pyenv-profile)"
