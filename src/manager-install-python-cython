@@ -38,5 +38,15 @@ case ${pyversion} in
     ;;
 esac
 
+# Call `pip` and remove the cache afterwards.
 pip install --no-cache-dir "cython < ${maxversion}"
 rm -rf ${HOME}/.cache/pip /tmp/*
+
+# Remove Python byte-compiled files.
+pydir="$(manager info pyenv-root)/versions/${pyversion}"
+find "${pydir}" -type f -name "*.pyc" | xargs rm -rf
+find "${pydir}" -type f -name "*.pyo" | xargs rm -rf
+find "${pydir}/lib" -type d -name "__pycache__" | xargs rm -rf
+
+# Remove Python testing stuff.
+find "${pydir}/lib" -type d -regex ".*/tests?" | xargs rm -rf
