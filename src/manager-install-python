@@ -131,6 +131,11 @@ if [ ${delete_openssl} -eq 1 ]; then
     manager remove ${package_openssl}
 fi
 
+# Enable the Python installation.
+if [ -f /etc/profile.d/01-pyenv-shell.sh ]; then
+    . /etc/profile.d/01-pyenv-shell.sh
+fi
+
 # Install latest `pip`, `wheel` and `setuptools`.
 if [ ! -z "${GET_PIP_URL}" ]; then
     manager install python-pip

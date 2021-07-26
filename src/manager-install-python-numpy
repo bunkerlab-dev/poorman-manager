@@ -16,6 +16,11 @@ if [ ! -x "$(command -v pyenv || true)" ]; then
     . "$(manager info pyenv-profile)"
 fi
 if [ ! -x "$(command -v pip || true)" ]; then
+    if [ -f /etc/profile.d/01-pyenv-shell.sh ]; then
+        . /etc/profile.d/01-pyenv-shell.sh
+    fi
+fi
+if [ ! -x "$(command -v pip || true)" ]; then
     echo "E: pip is not installed in your system"
     exit 1
 fi
