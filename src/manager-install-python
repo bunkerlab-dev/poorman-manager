@@ -75,6 +75,24 @@ if [ ! -d $(manager info openssl-root ${version_openssl}) ]; then
     manager install ${package_openssl}
 fi
 
+# Fix possible bug in libc6 headers that prevents `socket` from being built.
+socketfile=/usr/include/bits/socket.h
+if [ -f ${socketfile} ]; then
+    line1=
+    line2=
+    if [ -z "$(grep '^#define.PF_CAN.*' ${socketfile})" ]; then
+        line1='#define PF_CAN          29      \/\* Controller Area Network \*\/'
+        sed -i "/^#define.PF_WANPIPE.*/a ${line1}" ${socketfile}
+    fi
+    if [ -z "$(grep '^#define.AF_CAN.*' ${socketfile})" ]; then
+        line2='#define AF_CAN          PF_CAN'
+        sed -i "/^#define.AF_WANPIPE.*/a ${line2}" ${socketfile}
+    fi
+    if [ ! -z "${line1}" -o ! -z "${line2}" ]; then
+        echo "Patched ${socketfile}..."
+    fi
+fi
+
 # Install a specific Python version.
 manager enable ${package_openssl}
 export CFLAGS="-I/usr/local/ssl/include"
