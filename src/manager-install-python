@@ -47,6 +47,7 @@ case ${version} in
         exit 1
     ;;
 esac
+custom_pip=$(test -z "${GET_PIP_URL}"; echo $?)
 package_openssl=openssl-${version_openssl}
 
 # Install PyEnv if not present.
@@ -137,7 +138,7 @@ if [ -f /etc/profile.d/01-pyenv-shell.sh ]; then
 fi
 
 # Install latest `pip`, `wheel` and `setuptools`.
-if [ ! -z "${GET_PIP_URL}" ]; then
+if [ ${custom_pip} -eq 0 ]; then
     manager install python-pip
 fi
 manager install python-wheel
