@@ -137,10 +137,15 @@ if [ -f /etc/profile.d/01-pyenv-shell.sh ]; then
     . /etc/profile.d/01-pyenv-shell.sh
 fi
 
-# Install latest `pip`, `wheel` and `setuptools`.
+# Install latest `pip`.
 if [ ${custom_pip} -eq 0 ]; then
     manager install python-pip
 fi
+
+# Install latest `wheel`.
 manager install python-wheel
+
+# Install latest `setuptools`. We need to uninstall it first because the
+# `setuptools` coming with Python 3.2 is broken.
 manager remove python-setuptools
 manager install python-setuptools
