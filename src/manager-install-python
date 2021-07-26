@@ -142,4 +142,5 @@ if [ ${custom_pip} -eq 0 ]; then
     manager install python-pip
 fi
 manager install python-wheel
+manager remove python-setuptools
 manager install python-setuptools
