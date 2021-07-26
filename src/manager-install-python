@@ -114,7 +114,6 @@ rm -rf ${pydir}/lib/*/lib-dynload/_xxtestfuzz*.so
 
 # Remove Python static stuff.
 find "${pydir}/lib" -type f -name "libpython*.a" | xargs rm -rf
-rm -rf ${pydir}/lib/*/config-*
 
 # Remove IDLE.
 find "${pydir}/bin" -name "idle*" | xargs rm -rf
