@@ -97,7 +97,11 @@ fi
 # Install a specific Python version.
 manager enable ${package_openssl}
 export CFLAGS="-I/usr/local/ssl/include"
-export LDFLAGS="-L/usr/local/ssl/lib"
+export LDFLAGS="-L/usr/local/ssl/lib -L/usr/lib"
+if [ "$(manager info os-arch)" = "amd64" ]; then
+    # Include location of `ffi.h` explicitly.
+    export CPPFLAGS="-I/usr/include/x86_64-linux-gnu"
+fi
 PATH="/usr/local/ssl/bin/openssl:${PATH}" pyenv install "${version}"
 echo "pyenv shell ${version}" > /etc/profile.d/01-pyenv-shell.sh
 
