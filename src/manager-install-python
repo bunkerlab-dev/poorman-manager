@@ -130,3 +130,10 @@ manager disable ${package_openssl}
 if [ ${delete_openssl} -eq 1 ]; then
     manager remove ${package_openssl}
 fi
+
+# Install latest `pip`, `wheel` and `setuptools`.
+if [ ! -z "${GET_PIP_URL}" ]; then
+    manager install python-pip
+fi
+manager install python-wheel
+manager install python-setuptools
