@@ -76,6 +76,13 @@ if [ ! -d $(manager info openssl-root ${version_openssl}) ]; then
     manager install ${package_openssl}
 fi
 
+# Install `libffi` for Python 3.7+.
+case ${version} in
+    3.[789].*)
+        manager install libffi5
+    ;;
+esac
+
 # Fix possible bug in libc6 headers that prevents `socket` from being built.
 socketfile=/usr/include/bits/socket.h
 if [ -f ${socketfile} ]; then
