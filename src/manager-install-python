@@ -76,9 +76,9 @@ if [ ! -d $(manager info openssl-root ${version_openssl}) ]; then
     manager install ${package_openssl}
 fi
 
-# Install `libffi` for Python 3.7+.
+# Install `libffi` manually for Python 3.6 or greater.
 case ${version} in
-    3.[789].*)
+    3.[6789].*)
         manager install libffi
     ;;
 esac
