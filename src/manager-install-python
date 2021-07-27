@@ -79,7 +79,7 @@ fi
 # Install `libffi` for Python 3.7+.
 case ${version} in
     3.[789].*)
-        manager install libffi5
+        manager install libffi
     ;;
 esac
 

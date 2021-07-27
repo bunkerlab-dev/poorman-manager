@@ -274,6 +274,37 @@ _info_pkg_config() {
 }
 
 
+_info_libffi() {
+    case "$(_info_os_name)-$(_info_os_version)" in
+        debian-4.0*)
+            echo "libffi4"
+        ;;
+        debian-[56].0*)
+            echo "libffi5"
+        ;;
+        ubuntu-8.04*)
+            echo "libffi4"
+        ;;
+        ubuntu-8.10*|ubuntu-9.*|ubuntu-10.*|ubuntu-11.04*)
+            echo "libffi5"
+        ;;
+        ubuntu-11.10*|ubuntu-1[2-9].*)
+            echo "libffi6"
+        ;;
+        ubuntu-2[01].*)
+            echo "libffi7"
+        ;;
+        centos-*)
+            echo "libffi"
+        ;;
+        *)
+            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
+            exit 1
+        ;;
+    esac
+}
+
+
 _info_pyenv_dev() {
     case "$(_info_os_name)-$(_info_os_version)" in
         debian-4.0*)
@@ -358,7 +389,7 @@ case "$1" in
     blas|lapack|hdf4|hdf5|netcdf4|matplotlib-dev)
         _info_$(echo $1 | tr - _)
     ;;
-    gcc-full|pkg-config)
+    gcc-full|pkg-config|libffi)
         _info_$(echo $1 | tr - _)
     ;;
     openssl-root)
