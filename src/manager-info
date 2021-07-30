@@ -346,7 +346,7 @@ _info_pyenv_profile() {
 
 
 _info_pyenv_root() {
-    echo /usr/local/share/pyenv
+    echo /opt/pyenv
 }
 
 
