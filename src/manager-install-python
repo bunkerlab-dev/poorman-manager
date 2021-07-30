@@ -48,7 +48,7 @@ case ${version} in
         exit 1
     ;;
 esac
-custom_pip=$(test -z "${GET_PIP_URL}"; echo $?)
+custom_pip=$(test -z "${GET_PIP_URL}" && echo 0 || echo 1)
 package_openssl=openssl-${version_openssl}
 
 # Install PyEnv if not present.
