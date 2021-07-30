@@ -25,7 +25,8 @@ case ${version} in
         version_openssl=1.1.1
         export GET_PIP_URL=
     ;;
-    3.[2-4]|\
+    3.[1-4]|\
+    3.1.[0-5]|\
     3.2.[0-6]|\
     3.3.[0-7]|\
     3.4.[0-9]|3.4.10|\
@@ -63,7 +64,7 @@ fi
 
 # Infer complete Python version if the user only gave major + minor.
 case ${version} in
-    2.[67]|3.[23456789])
+    2.[67]|3.[1-9])
         regex=$(echo "^\ \ ${version}.[0-9]\+$" | sed 's|\.|\\\.|g')
         version=$(pyenv install -l | grep "${regex}" | tail -n1 | xargs)
     ;;
@@ -78,7 +79,7 @@ fi
 
 # Install `libffi` manually for Python 3.6 or greater.
 case ${version} in
-    3.[6789].*)
+    3.[6-9].*)
         manager install libffi
     ;;
 esac
