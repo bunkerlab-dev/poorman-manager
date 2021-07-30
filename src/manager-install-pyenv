@@ -12,14 +12,19 @@ if [ $# -ne 0 ]; then
     exit 1
 fi
 
-# Download PyEnv.
+# Download and install PyEnv.
 echo "Downloading PyEnv..."
 pyenv_root="$(manager info pyenv-root)"
+
+cwd="$(pwd)"
+tmpdir="$(mktemp -d)"
+cd ${tmpdir}
 wget -q https://github.com/pyenv/pyenv/archive/master.tar.gz -O pyenv.tar.gz
 
 echo "Installing PyEnv..."
 tar -xf pyenv.tar.gz && mv pyenv-master "${pyenv_root}"
-rm -f pyenv.tar.gz
+cd ${cwd}
+rm -rf ${tmpdir}
 
 # Fixing missing double quotes for very ancient bash shells.
 echo "Patching PyEnv..."
