@@ -12,6 +12,13 @@ if [ $# -ne 0 ]; then
     exit 1
 fi
 
+# Guess if we have sudo.
+if [ -x "$(command -v sudo || true)" ]; then
+    sudocmd=sudo
+else
+    sudocmd=
+fi
+
 # Download and install PyEnv.
 echo "Downloading PyEnv..."
 pyenv_root="$(manager info pyenv-root)"
@@ -56,7 +63,7 @@ find ${pyenv_root}/plugins/python-build/share/python-build                    \
 
 # Add PyEnv initialisation to profile.
 pyenv_profile="$(manager info pyenv-profile)"
-mkdir -p $(dirname ${pyenv_profile})
+${sudocmd} mkdir -p $(dirname ${pyenv_profile})
 echo 'Configuring PyEnv...'
 {
 echo '# Ensure that source command exists.'
@@ -69,6 +76,6 @@ echo 'export PATH="${PYENV_ROOT}/bin:$PATH"'
 echo 'eval "$(pyenv init --path)"'
 echo 'eval "$(pyenv init -)"'
 echo ''
-} > ${pyenv_profile}
+} | ${sudocmd} tee ${pyenv_profile} >/dev/null
 
 echo "Done!"

@@ -12,6 +12,13 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
+# Guess if we have sudo.
+if [ -x "$(command -v sudo || true)" ]; then
+    sudocmd=sudo
+else
+    sudocmd=
+fi
+
 # Parse arguments.
 repo_remove=0
 while [ $# -gt 0 ]; do
@@ -91,9 +98,9 @@ while [ $# -gt 0 ]; do
                 repo_remove=1
             fi
             manager update
-            ${pkgman} ${remove} -y ${pkglist}
+            ${sudocmd} ${pkgman} ${remove} -y ${pkglist}
             if [ ! -z ${autoremove} ]; then
-                ${pkgman} ${autoremove} -y
+                ${sudocmd} ${pkgman} ${autoremove} -y
             fi
         ;;
     esac

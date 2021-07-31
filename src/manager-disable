@@ -12,16 +12,18 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
+# Guess if we have sudo.
+if [ -x "$(command -v sudo || true)" ]; then
+    sudocmd=sudo
+else
+    sudocmd=
+fi
+
 # Apply disabling.
 case "$1" in
     openssl-1.0.2|openssl-1.1.1)
         sslpath=/usr/local/ssl
         prefix=$(manager info openssl-root $(echo $1 | cut -d- -f2))
-        if [ -x "$(command -v sudo || true)" ]; then
-            sudocmd=sudo
-        else
-            sudocmd=
-        fi
         if [ "$(readlink -f ${sslpath})" = "${prefix}" ]; then
             ${sudocmd} rm ${sslpath}
             if [ -d ${sslpath}.bak ]; then

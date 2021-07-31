@@ -12,6 +12,13 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
+# Guess if we have sudo.
+if [ -x "$(command -v sudo || true)" ]; then
+    sudocmd=sudo
+else
+    sudocmd=
+fi
+
 version="$1"
 case ${version} in
     2.6|\
@@ -91,11 +98,11 @@ if [ -f ${socketfile} ]; then
     line2=
     if [ -z "$(grep '^#define.PF_CAN.*' ${socketfile})" ]; then
         line1='#define PF_CAN          29      \/\* Controller Area Network \*\/'
-        sed -i "/^#define.PF_WANPIPE.*/a ${line1}" ${socketfile}
+        ${sudocmd} sed -i "/^#define.PF_WANPIPE.*/a ${line1}" ${socketfile}
     fi
     if [ -z "$(grep '^#define.AF_CAN.*' ${socketfile})" ]; then
         line2='#define AF_CAN          PF_CAN'
-        sed -i "/^#define.AF_WANPIPE.*/a ${line2}" ${socketfile}
+        ${sudocmd} sed -i "/^#define.AF_WANPIPE.*/a ${line2}" ${socketfile}
     fi
     if [ ! -z "${line1}" -o ! -z "${line2}" ]; then
         echo "Patched ${socketfile}..."
@@ -111,7 +118,7 @@ if [ "$(manager info os-arch)" = "amd64" ]; then
     export CPPFLAGS="-I/usr/include/x86_64-linux-gnu"
 fi
 PATH="/usr/local/ssl/bin/openssl:${PATH}" pyenv install "${version}"
-echo "pyenv shell ${version}" > /etc/profile.d/01-pyenv-shell.sh
+echo "pyenv shell ${version}" | ${sudocmd} tee /etc/profile.d/01-pyenv-shell.sh >/dev/null
 
 # Remove Python byte-compiled files.
 pydir="$(manager info pyenv-root)/versions/${version}"

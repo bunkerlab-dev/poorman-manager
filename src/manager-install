@@ -12,6 +12,13 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
+# Guess if we have sudo.
+if [ -x "$(command -v sudo || true)" ]; then
+    sudocmd=sudo
+else
+    sudocmd=
+fi
+
 # Parse arguments.
 repo_install=0
 while [ $# -gt 0 ]; do
@@ -73,7 +80,7 @@ while [ $# -gt 0 ]; do
                 manager update
                 repo_install=1
             fi
-            ${pkgman} install -y ${norecommends} ${pkglist}
+            ${sudocmd} ${pkgman} install -y ${norecommends} ${pkglist}
         ;;
     esac
     shift

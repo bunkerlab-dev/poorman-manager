@@ -12,6 +12,13 @@ if [ $# -ne 0 ]; then
     exit 1
 fi
 
+# Guess if we have sudo.
+if [ -x "$(command -v sudo || true)" ]; then
+    sudocmd=sudo
+else
+    sudocmd=
+fi
+
 # Perform update based on the package manager.
 pkgman=$(manager info os-package-manager)
 case ${pkgman} in
@@ -26,4 +33,4 @@ case ${pkgman} in
     ;;
 esac
 
-${pkgman} ${update}
+${sudocmd} ${pkgman} ${update}
