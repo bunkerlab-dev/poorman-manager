@@ -154,6 +154,7 @@ fi
 
 # Enable the Python installation.
 if [ -f /etc/profile.d/01-pyenv-shell.sh ]; then
+    . "$(manager info pyenv-profile)"
     . /etc/profile.d/01-pyenv-shell.sh
 fi
 
