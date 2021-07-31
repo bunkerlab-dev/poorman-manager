@@ -40,6 +40,10 @@ while [ $# -gt 0 ]; do
         ;;
         python-2.*|python-3.*)
             version="$(echo $1 | cut -d- -f2)"
+            # Ensure PyEnv is enabled.
+            if [ ! -x "$(command -v pyenv || true)" ]; then
+                . "$(manager info pyenv-profile)"
+            fi
             # Infer complete Python version if the user only gave major + minor.
             case ${version} in
                 2.[67]|3.[23456789])
@@ -47,10 +51,6 @@ while [ $# -gt 0 ]; do
                     version=$(pyenv install -l | grep "${regex}" | tail -n1 | xargs)
                 ;;
             esac
-            # Ensure PyEnv is enabled.
-            if [ ! -x "$(command -v pyenv || true)" ]; then
-                . "$(manager info pyenv-profile)"
-            fi
             # Uninstall the Python version through PyEnv.
             yes | pyenv uninstall ${version}
         ;;
