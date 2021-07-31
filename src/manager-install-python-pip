@@ -60,7 +60,7 @@ esac
 
 # Call `pip` and remove the cache afterwards.
 pip install --no-cache-dir --upgrade "pip < ${maxversion}"
-rm -rf ${HOME}/.cache/pip /tmp/*
+rm -rf ${HOME}/.cache/pip /tmp/pip-*
 
 # Remove Python byte-compiled files.
 pydir="$(manager info pyenv-root)/versions/${pyversion}"
