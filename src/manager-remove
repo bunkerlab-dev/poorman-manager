@@ -12,14 +12,6 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-# Guess if we have sudo.
-if [ -x "$(command -v sudo || true)" ]; then
-    sudocmd=sudo
-    ${sudocmd} true
-else
-    sudocmd=
-fi
-
 # Parse arguments.
 repo_remove=0
 while [ $# -gt 0 ]; do
@@ -55,6 +47,14 @@ while [ $# -gt 0 ]; do
             yes | pyenv uninstall ${version}
         ;;
         *)
+            # Guess if we have sudo.
+            if [ -x "$(command -v sudo || true)" ]; then
+                sudocmd=sudo
+                ${sudocmd} true
+            else
+                sudocmd=
+            fi
+            # Translate specific package names.
             case "$1" in
                 gcc-full|pkg-config|blas|lapack|matplotlib-dev|hdf4|hdf5|netcdf4)
                     pkglist="$(manager info $1)"
