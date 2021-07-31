@@ -27,8 +27,8 @@ case ${pkgman} in
         ${sudocmd} ${pkgman} clean
         ${sudocmd} ${pkgman} autoclean
         ${sudocmd} rm -rf /var/cache/debconf/*-old
-        ${sudocmd} find /var/cache/apt -type f | xargs rm -f
-        ${sudocmd} find /var/lib/apt/lists -type f | xargs rm -f
+        ${sudocmd} find /var/cache/apt -type f | xargs ${sudocmd} rm -f
+        ${sudocmd} find /var/lib/apt/lists -type f | xargs ${sudocmd} rm -f
     ;;
     yum)
         ${sudocmd} ${pkgman} clean all
