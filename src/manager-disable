@@ -15,6 +15,7 @@ fi
 # Guess if we have sudo.
 if [ -x "$(command -v sudo || true)" ]; then
     sudocmd=sudo
+    ${sudocmd} true
 else
     sudocmd=
 fi
