@@ -24,11 +24,11 @@ while [ $# -gt 0 ]; do
         ;;
         python-pip|python-setuptools|python-wheel)
             pip uninstall -y "$(echo $1 | cut -d- -f2)"
-            rm -rf ${HOME}/.cache/pip /tmp/*
+            rm -rf ${HOME}/.cache/pip /tmp/pip-*
         ;;
         python-cython|python-numpy|python-scipy)
             pip uninstall -y "$(echo $1 | cut -d- -f2)"
-            rm -rf ${HOME}/.cache/pip /tmp/*
+            rm -rf ${HOME}/.cache/pip /tmp/pip-*
         ;;
         python-2.*|python-3.*)
             version="$(echo $1 | cut -d- -f2)"
