@@ -8,7 +8,7 @@ alias manager="sh ${here}/manager"
 
 _info_os_arch() {
     case "$(_info_os_name)" in
-        debian|ubuntu)
+        debian|ubuntu|trisquel)
             echo $(dpkg --print-architecture)
         ;;
         centos|opensuse*|sles)
@@ -54,7 +54,7 @@ _info_os_version() {
 
 _info_os_package_manager() {
     case "$(_info_os_name)" in
-        debian|ubuntu)
+        debian|ubuntu|trisquel)
             echo "apt-get"
         ;;
         centos)
@@ -76,7 +76,7 @@ _info_hdf4() {
         debian-[45].0*)
             echo "libhdf4g libhdf4g-dev"
         ;;
-        ubuntu-*)
+        ubuntu-*|trisquel-*)
             echo "libhdf4-0 libhdf4-dev"
         ;;
         centos-*)
@@ -101,7 +101,7 @@ _info_hdf5() {
         debian-5.0*)
             echo "libhdf5-serial-1.6.6-0 libhdf5-serial-dev"
         ;;
-        ubuntu-*)
+        ubuntu-*|trisquel-*)
             echo "libhdf5-103 libhdf5-dev"
         ;;
         centos-*)
@@ -126,7 +126,7 @@ _info_blas() {
         debian-5.0*)
             echo "libblas3gf libblas-dev"
         ;;
-        ubuntu-*)
+        ubuntu-*|trisquel-*)
             echo "libblas3 libblas-dev"
         ;;
         centos-*)
@@ -151,7 +151,7 @@ _info_lapack() {
         debian-5.0*)
             echo "liblapack3gf liblapack-dev"
         ;;
-        ubuntu-*)
+        ubuntu-*|trisquel-*)
             echo "liblapack3 liblapack-dev"
         ;;
         centos-*)
@@ -173,7 +173,7 @@ _info_netcdf4() {
         debian-5.0*)
             echo "libnetcdf4 libnetcdf-dev"
         ;;
-        ubuntu-*)
+        ubuntu-*|trisquel-*)
             echo "libnetcdf15 libnetcdf-dev"
         ;;
         centos-*)
@@ -195,7 +195,7 @@ _info_matplotlib_dev() {
         debian-[45].0*)
             echo "libfreetype6-dev libpng12-dev"
         ;;
-        ubuntu-*)
+        ubuntu-*|trisquel-*)
             echo "libfreetype-dev libpng-dev"
         ;;
         centos-*)
@@ -229,7 +229,7 @@ _info_openssl_root() {
 
 _info_gcc_full() {
     case "$(_info_os_name)-$(_info_os_version)" in
-        debian-[45].0*|ubuntu-*)
+        debian-[45].0*|ubuntu-*|trisquel-*)
             echo "gcc g++ gfortran"
         ;;
         centos-*)
@@ -248,7 +248,7 @@ _info_gcc_full() {
 
 _info_pkg_config() {
     case "$(_info_os_name)-$(_info_os_version)" in
-        debian-[45].0*|ubuntu-*|opensuse*-*|sles-*)
+        debian-[45].0*|ubuntu-*|trisquel-*|opensuse*-*|sles-*)
             echo "pkg-config"
         ;;
         centos-*)
@@ -276,7 +276,7 @@ _info_libffi() {
         ubuntu-8.10*|ubuntu-9.*|ubuntu-10.*|ubuntu-11.04*)
             echo "libffi5"
         ;;
-        ubuntu-11.10*|ubuntu-1[2-9].*)
+        ubuntu-11.10*|ubuntu-1[2-9].*|trisquel-*)
             echo "libffi6"
         ;;
         ubuntu-2[01].*)
@@ -301,7 +301,7 @@ _info_pyenv_dev() {
                 libsqlite3-dev libffi-dev zlib1g-dev libbz2-dev               \
             " | xargs
         ;;
-        debian-5.0*|ubuntu-*)
+        debian-5.0*|ubuntu-*|trisquel-*)
             echo "
                 build-essential tk-dev libncursesw5-dev libreadline-dev       \
                 libsqlite3-dev libffi-dev xz-utils zlib1g-dev libbz2-dev      \
