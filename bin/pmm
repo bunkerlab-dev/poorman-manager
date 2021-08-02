@@ -1,5 +1,7 @@
 #! /bin/sh
 
+
+# Pre-configure.
 set -e
 here=$(readlink -f "$0" | xargs dirname)
 name=$(readlink -f "$0" | xargs basename)
@@ -7,15 +9,38 @@ find ${here}/ -name "pmm" -exec chmod 755 {} \;
 find ${here}/ -name "pmm-*" -exec chmod 755 {} \;
 
 
+# Usage function.
+usage() {
+    echo \
+"Usage: pmm <command> [<args>]
+
+Valid pmm commands are:
+
+    info        get relevant system and package information
+
+    install     install a package
+    remove      remove a package
+    update      update the system package manager
+    clean       clean the system package manager data
+
+    enable      make a specific package available
+    disable     make a specific package unavailable
+"
+}
+
+
 # Main script.
 option="$1"
 case "${option}" in
-    clean | disable | enable | info | install | remove | update)
+    info | install | remove | update | clean | enable | disable)
         shift
         sh "${here}/${name}-${option}" $@
     ;;
     *)
-        echo "Unknown option '${option}'"
-        exit 1
+        exitcode=$(test -z "${option}" && echo 0 || echo 1)
+        if [ ${exitcode} -eq 1 ]; then
+            echo "E: Unknown ${name} option '${option}'"
+        fi
+        usage && exit ${exitcode}
     ;;
 esac
