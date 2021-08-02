@@ -1,0 +1,92 @@
+#! /bin/sh
+#
+# Copyright (c) 2021 Víctor Molina García
+# MIT License
+#
+
+
+# Pre-configure.
+set -e
+here=$(readlink -f "$0" | xargs dirname)
+name=$(readlink -f "$0" | xargs basename)
+alias pmm="sh ${here}/pmm"
+
+
+_system_os_name() {
+    if [ -f "/etc/os-release" ]; then
+        echo $(grep ^ID= /etc/os-release |
+               cut -d= -f 2 | sed -r 's/^"|"$//g')
+    elif [ -f "/etc/debian_version" ]; then
+        echo "debian"
+    else
+        echo 1>&2 "W: Cannot find operating system"
+        echo ""
+    fi
+}
+
+
+_system_os_version() {
+    if [ -f "/etc/os-release" ]; then
+        echo $(grep ^VERSION_ID /etc/os-release |
+               cut -d= -f 2 | sed -r 's/^"|"$//g')
+    elif [ -f "/etc/debian_version" ]; then
+        echo $(cat /etc/debian_version)
+    else
+        echo 1>&2 "W: Cannot find operating system version"
+        echo ""
+    fi
+}
+
+
+_system_os_arch() {
+    case "$(_system_os_name)" in
+        debian | ubuntu | trisquel)
+            echo "$(dpkg --print-architecture)"
+        ;;
+        centos | opensuse* | sles)
+            if [ -f "/lib64/libc.so.6" ]; then
+                echo "amd64"
+            elif [ -f "/lib/libc.so.6" ]; then
+                echo "i386"
+            else
+                echo 1>&2 "W: Cannot find operating system arch"
+                echo ""
+            fi
+        ;;
+        *)
+            echo 1>&2 "E: Unknown operating system: '$(_system_os_name)'"
+            exit 1
+        ;;
+    esac
+}
+
+
+_system_os_package_manager() {
+    case "$(_system_os_name)" in
+        debian | ubuntu | trisquel)
+            echo "apt-get"
+        ;;
+        centos)
+            echo "yum"
+        ;;
+        opensuse* | sles)
+            echo "zypper"
+        ;;
+        *)
+            echo 1>&2 "E: Unknown operating system: '$(_system_os_name)'"
+            exit 1
+        ;;
+    esac
+}
+
+
+# Main script.
+case "$1" in
+    os-name | os-version | os-arch | os-package-manager)
+        _system_$(echo $1 | tr - _)
+    ;;
+    *)
+        echo 1>&2 "E: Unknown ${name} option: '$1'"
+        exit 1
+    ;;
+esac

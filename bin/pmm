@@ -20,7 +20,8 @@ usage() {
 
 Valid pmm commands are:
 
-    info        get relevant system and package information
+    system      get relevant system information
+    info        get relevant package information
 
     install     install a package
     remove      remove a package
@@ -36,7 +37,7 @@ Valid pmm commands are:
 # Main script.
 option="$1"
 case "${option}" in
-    info | install | remove | update | clean | enable | disable)
+    system | info | install | remove | update | clean | enable | disable)
         shift
         sh "${here}/${name}-${option}" $@
     ;;
