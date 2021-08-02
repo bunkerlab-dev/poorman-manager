@@ -1,5 +1,11 @@
 #! /bin/sh
+#
+# Copyright (c) 2021 Víctor Molina García
+# MIT License
+#
 
+
+# Pre-configure.
 set -e
 here=$(readlink -f "$0" | xargs dirname)
 name=$(readlink -f "$0" | xargs basename)
