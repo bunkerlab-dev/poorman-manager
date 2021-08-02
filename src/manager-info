@@ -6,6 +6,11 @@ name=$(readlink -f "$0" | xargs basename)
 alias manager="sh ${here}/manager"
 
 
+_info_version() {
+    echo "0.1.0"
+}
+
+
 _info_os_arch() {
     case "$(_info_os_name)" in
         debian|ubuntu|trisquel)
@@ -384,7 +389,7 @@ case "$1" in
         shift
         _info_openssl_root $@
     ;;
-    os-arch|os-name|os-version|os-package-manager|profile)
+    os-arch|os-name|os-version|os-package-manager|profile|version)
         _info_$(echo $1 | tr - _)
     ;;
     pyenv-dev|pyenv-profile|pyenv-root)
