@@ -62,7 +62,6 @@ case ${version} in
         exit 1
     ;;
 esac
-custom_pip=$(test -z "${GET_PIP_URL}" && echo 0 || echo 1)
 package_openssl=openssl-${version_openssl}
 
 # Install PyEnv if not present.
@@ -170,8 +169,18 @@ case ${version} in
     ;;
     *)
         # Install latest `pip`.
-        if [ ${custom_pip} -eq 0 ]; then
+        if [ -z "${GET_PIP_URL}" ]; then
+            echo "Upgrading pip..."
             pmm install python-pip
+        else
+            # Do it again because sometimes PyEnv does not use `GET_PIP_URL`.
+            echo "Installing custom pip..."
+            cwd="$(pwd)"
+            tmpdir="$(mktemp -d)"
+            cd ${tmpdir}
+            wget -q "${GET_PIP_URL}"
+            python "$(basename ${GET_PIP_URL})"
+            cd "${cwd}"
         fi
         # Install latest `wheel`.
         pmm install python-wheel
