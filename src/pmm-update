@@ -3,7 +3,7 @@
 set -e
 here=$(readlink -f "$0" | xargs dirname)
 name=$(readlink -f "$0" | xargs basename)
-alias manager="sh ${here}/manager"
+alias pmm="sh ${here}/pmm"
 
 
 # Check number of arguments.
@@ -21,7 +21,7 @@ else
 fi
 
 # Perform update based on the package manager.
-pkgman=$(manager info os-package-manager)
+pkgman=$(pmm info os-package-manager)
 case ${pkgman} in
     yum)
         update="update -y"

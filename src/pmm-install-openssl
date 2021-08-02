@@ -3,7 +3,7 @@
 set -e
 here=$(readlink -f "$0" | xargs dirname)
 name=$(readlink -f "$0" | xargs basename)
-alias manager="sh ${here}/manager"
+alias pmm="sh ${here}/pmm"
 
 
 # Check number of arguments.
@@ -27,7 +27,7 @@ fi
 remote="https://www.openssl.org/source"
 pkgname="openssl-${version}"
 pkgfile="${pkgname}.tar.gz"
-prefix=$(manager info openssl-root ${version})
+prefix=$(pmm info openssl-root ${version})
 
 # Raise an error if `g++` is missing.
 if [ ! -x "$(command -v g++ || true)" ]; then
@@ -40,7 +40,7 @@ delete_make=0
 if [ ! -x "$(command -v make || true)" ]; then
     delete_make=1
     echo "Installing make..."
-    manager install make 1>/dev/null 2>&1
+    pmm install make 1>/dev/null 2>&1
 fi
 
 # Create temporary workspace.
@@ -58,7 +58,7 @@ echo "Decompressing OpenSSL ${version}..."
 tar -xf ${pkgfile}
 
 # Find out the architecture without relying on the kernel.
-arch=$(manager info os-arch)
+arch=$(pmm info os-arch)
 archopts=
 if [ "${arch}" = "amd64" ]; then
     archopts="linux-generic64 -m64"
@@ -101,7 +101,7 @@ cd ${cwd}
 
 # Remove `make` if installed on the fly.
 if [ ${delete_make} -eq 1 ]; then
-    manager remove make
+    pmm remove make
 fi
 
 echo "Done!"

@@ -3,7 +3,7 @@
 set -e
 here=$(readlink -f "$0" | xargs dirname)
 name=$(readlink -f "$0" | xargs basename)
-alias manager="sh ${here}/manager"
+alias pmm="sh ${here}/pmm"
 
 
 # Check number of arguments.
@@ -22,7 +22,7 @@ fi
 
 # Download and install PyEnv.
 echo "Downloading PyEnv..."
-pyenv_root="$(manager info pyenv-root)"
+pyenv_root="$(pmm info pyenv-root)"
 
 cwd="$(pwd)"
 tmpdir="$(mktemp -d)"
@@ -63,7 +63,7 @@ find ${pyenv_root}/plugins/python-build/share/python-build                    \
     | xargs rm -rf
 
 # Add PyEnv initialisation to profile.
-pyenv_profile="$(manager info pyenv-profile)"
+pyenv_profile="$(pmm info pyenv-profile)"
 ${sudocmd} mkdir -p $(dirname ${pyenv_profile})
 echo 'Configuring PyEnv...'
 {

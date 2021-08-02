@@ -2,7 +2,7 @@
 
 set -e
 here=$(readlink -f "$0" | xargs dirname)
-alias manager="sh ${here}/manager"
+alias pmm="sh ${here}/pmm"
 
 
 # Ensure that the script does not receive arguments.
@@ -13,7 +13,7 @@ fi
 
 # Ensure that `pip` is available.
 if [ ! -x "$(command -v pyenv || true)" ]; then
-    . "$(manager info pyenv-profile)"
+    . "$(pmm info pyenv-profile)"
 fi
 if [ ! -x "$(command -v pip || true)" ]; then
     if [ -f /etc/profile.d/01-pyenv-shell.sh ]; then
@@ -54,7 +54,7 @@ pip install --no-cache-dir --upgrade "wheel < ${maxversion}"
 rm -rf ${HOME}/.cache/pip /tmp/pip-*
 
 # Remove Python byte-compiled files.
-pydir="$(manager info pyenv-root)/versions/${pyversion}"
+pydir="$(pmm info pyenv-root)/versions/${pyversion}"
 find "${pydir}" -type f -name "*.pyc" | xargs rm -rf
 find "${pydir}" -type f -name "*.pyo" | xargs rm -rf
 find "${pydir}/lib" -type d -name "__pycache__" | xargs rm -rf
