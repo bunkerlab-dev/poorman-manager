@@ -177,10 +177,11 @@ case ${version} in
             echo "Installing custom pip..."
             cwd="$(pwd)"
             tmpdir="$(mktemp -d)"
-            cd ${tmpdir}
+            cd "${tmpdir}"
             wget -q "${GET_PIP_URL}"
             python "$(basename ${GET_PIP_URL})"
             cd "${cwd}"
+            rm -rf "${tmpdir}"
         fi
         # Install latest `wheel`.
         pmm install python-wheel
