@@ -60,7 +60,7 @@ case ${pyversion} in
         maxversion=1.7
     ;;
     *)
-        echo "E: unsupported Python version: '${pyversion}'"
+        echo 1>&2 "E: unsupported Python version: '${pyversion}'"
         exit 1
     ;;
 esac
