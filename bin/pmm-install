@@ -54,7 +54,7 @@ while [ $# -gt 0 ]; do
                     pkglist="$(pmm info $1)"
                 ;;
                 hdf4|hdf5|netcdf4)
-                    if [ "$(pmm info os-name)" = "centos" ]; then
+                    if [ "$(pmm system os-name)" = "centos" ]; then
                         pmm install epel-release
                     fi
                     pkglist="$(pmm info $1)"

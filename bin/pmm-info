@@ -18,7 +18,7 @@ _info_version() {
 
 
 _info_os_arch() {
-    case "$(_info_os_name)" in
+    case "$(pmm system os-name)" in
         debian|ubuntu|trisquel)
             echo $(dpkg --print-architecture)
         ;;
@@ -32,39 +32,15 @@ _info_os_arch() {
             fi
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)'"
+            echo "E: Unknown operating system '$(pmm system os-name)'"
             exit 1
         ;;
     esac
 }
 
 
-_info_os_name() {
-    if [ -f /etc/os-release ]; then
-        echo $(grep ^ID= /etc/os-release | cut -d= -f 2 | sed -r 's/^"|"$//g')
-    elif [ -f /etc/debian_version ]; then
-        echo "debian"
-    else
-        echo "E: Unknown operating system"
-        exit 1
-    fi
-}
-
-
-_info_os_version() {
-    if [ -f /etc/os-release ]; then
-        echo $(grep ^VERSION_ID /etc/os-release | cut -d= -f 2 | sed -r 's/^"|"$//g')
-    elif [ -f /etc/debian_version ]; then
-        echo $(cat /etc/debian_version)
-    else
-        echo "E: Unknown operating system version"
-        exit 1
-    fi
-}
-
-
 _info_os_package_manager() {
-    case "$(_info_os_name)" in
+    case "$(pmm system os-name)" in
         debian|ubuntu|trisquel)
             echo "apt-get"
         ;;
@@ -75,7 +51,7 @@ _info_os_package_manager() {
             echo "zypper"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)'"
+            echo "E: Unknown operating system '$(pmm system os-name)'"
             exit 1
         ;;
     esac
@@ -83,7 +59,7 @@ _info_os_package_manager() {
 
 
 _info_hdf4() {
-    case "$(_info_os_name)-$(_info_os_version)" in
+    case "$(pmm system os-name)-$(pmm system os-version)" in
         debian-[45].0*)
             echo "libhdf4g libhdf4g-dev"
         ;;
@@ -97,7 +73,7 @@ _info_hdf4() {
             echo "libhdf4 hdf-devel hdf-devel-static"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
+            echo "E: Unknown operating system '$(pmm system os-name)-$(pmm system os-version)'"
             exit 1
         ;;
     esac
@@ -105,7 +81,7 @@ _info_hdf4() {
 
 
 _info_hdf5() {
-    case "$(_info_os_name)-$(_info_os_version)" in
+    case "$(pmm system os-name)-$(pmm system os-version)" in
         debian-4.0*)
             echo "libhdf5-serial-1.6.5-0 libhdf5-serial-dev"
         ;;
@@ -122,7 +98,7 @@ _info_hdf5() {
             echo "libhdf5 hdf5-devel hdf5-devel-static"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
+            echo "E: Unknown operating system '$(pmm system os-name)-$(pmm system os-version)'"
             exit 1
         ;;
     esac
@@ -130,7 +106,7 @@ _info_hdf5() {
 
 
 _info_blas() {
-    case "$(_info_os_name)-$(_info_os_version)" in
+    case "$(pmm system os-name)-$(pmm system os-version)" in
         debian-4.0*)
             echo "refblas3 refblas3-dev"
         ;;
@@ -147,7 +123,7 @@ _info_blas() {
             echo "libblas3 blas-devel blas-devel-static"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
+            echo "E: Unknown operating system '$(pmm system os-name)-$(pmm system os-version)'"
             exit 1
         ;;
     esac
@@ -155,7 +131,7 @@ _info_blas() {
 
 
 _info_lapack() {
-    case "$(_info_os_name)-$(_info_os_version)" in
+    case "$(pmm system os-name)-$(pmm system os-version)" in
         debian-4.0*)
             echo "lapack3 lapack3-dev"
         ;;
@@ -172,7 +148,7 @@ _info_lapack() {
             echo "liblapack3 lapack-devel lapack-devel-static"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
+            echo "E: Unknown operating system '$(pmm system os-name)-$(pmm system os-version)'"
             exit 1
         ;;
     esac
@@ -180,7 +156,7 @@ _info_lapack() {
 
 
 _info_netcdf4() {
-    case "$(_info_os_name)-$(_info_os_version)" in
+    case "$(pmm system os-name)-$(pmm system os-version)" in
         debian-5.0*)
             echo "libnetcdf4 libnetcdf-dev"
         ;;
@@ -194,7 +170,7 @@ _info_netcdf4() {
             echo "libnetcdf18 netcdf-devel netcdf-devel-static"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
+            echo "E: Unknown operating system '$(pmm system os-name)-$(pmm system os-version)'"
             exit 1
         ;;
     esac
@@ -202,7 +178,7 @@ _info_netcdf4() {
 
 
 _info_matplotlib_dev() {
-    case "$(_info_os_name)-$(_info_os_version)" in
+    case "$(pmm system os-name)-$(pmm system os-version)" in
         debian-[45].0*)
             echo "libfreetype6-dev libpng12-dev"
         ;;
@@ -216,7 +192,7 @@ _info_matplotlib_dev() {
             echo "freetype-devel libpng16-devel"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
+            echo "E: Unknown operating system '$(pmm system os-name)-$(pmm system os-version)'"
             exit 1
         ;;
     esac
@@ -239,7 +215,7 @@ _info_openssl_root() {
 
 
 _info_gcc_full() {
-    case "$(_info_os_name)-$(_info_os_version)" in
+    case "$(pmm system os-name)-$(pmm system os-version)" in
         debian-[45].0*|ubuntu-*|trisquel-*)
             echo "gcc g++ gfortran"
         ;;
@@ -250,7 +226,7 @@ _info_gcc_full() {
             echo "gcc gcc-c++ gcc-fortran"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
+            echo "E: Unknown operating system '$(pmm system os-name)-$(pmm system os-version)'"
             exit 1
         ;;
     esac
@@ -258,7 +234,7 @@ _info_gcc_full() {
 
 
 _info_pkg_config() {
-    case "$(_info_os_name)-$(_info_os_version)" in
+    case "$(pmm system os-name)-$(pmm system os-version)" in
         debian-[45].0*|ubuntu-*|trisquel-*|opensuse*-*|sles-*)
             echo "pkg-config"
         ;;
@@ -266,7 +242,7 @@ _info_pkg_config() {
             echo "pkgconfig"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
+            echo "E: Unknown operating system '$(pmm system os-name)-$(pmm system os-version)'"
             exit 1
         ;;
     esac
@@ -274,7 +250,7 @@ _info_pkg_config() {
 
 
 _info_libffi() {
-    case "$(_info_os_name)-$(_info_os_version)" in
+    case "$(pmm system os-name)-$(pmm system os-version)" in
         debian-4.0*)
             echo "libffi4"
         ;;
@@ -297,7 +273,7 @@ _info_libffi() {
             echo "libffi"
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
+            echo "E: Unknown operating system '$(pmm system os-name)-$(pmm system os-version)'"
             exit 1
         ;;
     esac
@@ -305,7 +281,7 @@ _info_libffi() {
 
 
 _info_pyenv_dev() {
-    case "$(_info_os_name)-$(_info_os_version)" in
+    case "$(pmm system os-name)-$(pmm system os-version)" in
         debian-4.0*)
             echo "
                 build-essential libncursesw5-dev libreadline-dev              \
@@ -332,7 +308,7 @@ _info_pyenv_dev() {
             " | xargs
         ;;
         *)
-            echo "E: Unknown operating system '$(_info_os_name)-$(_info_os_version)'"
+            echo "E: Unknown operating system '$(pmm system os-name)-$(pmm system os-version)'"
             exit 1
         ;;
     esac
@@ -395,7 +371,7 @@ case "$1" in
         shift
         _info_openssl_root $@
     ;;
-    os-arch|os-name|os-version|os-package-manager|profile|version)
+    os-arch|os-package-manager|profile|version)
         _info_$(echo $1 | tr - _)
     ;;
     pyenv-dev|pyenv-profile|pyenv-root)
