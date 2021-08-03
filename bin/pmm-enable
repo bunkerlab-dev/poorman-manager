@@ -14,7 +14,7 @@ alias pmm="sh ${here}/pmm"
 
 # Check number of arguments.
 if [ $# -ne 1 ]; then
-    echo "E: The ${name} command takes one argument"
+    echo 1>&2 "E: The ${name} command takes one argument"
     exit 1
 fi
 
@@ -28,20 +28,21 @@ fi
 
 # Apply enabling.
 case "$1" in
-    openssl-1.0.2|openssl-1.1.1)
-        sslpath=/usr/local/ssl
-        prefix=$(pmm info openssl-root $(echo $1 | cut -d- -f2))
-        if [ -d ${sslpath} ]; then
-            if [ ! -d ${sslpath}.bak -a ! -L ${sslpath} ]; then
-                ${sudocmd} mv ${sslpath} ${sslpath}.bak
+    openssl-1.0.2 | openssl-1.1.1)
+        sslpath="/usr/local/ssl"
+        sslvers="$(echo $1 | cut -d- -f2)"
+        prefix="$(pmm info openssl-root ${sslvers})"
+        if [ -d "${sslpath}" ]; then
+            if [ ! -d "${sslpath}.bak" -a ! -L "${sslpath}" ]; then
+                ${sudocmd} mv "${sslpath}" "${sslpath}.bak"
             else
-                ${sudocmd} rm ${sslpath}
+                ${sudocmd} rm "${sslpath}"
             fi
         fi
-        ${sudocmd} ln -s ${prefix} ${sslpath}
+        ${sudocmd} ln -s "${prefix}" "${sslpath}"
     ;;
     *)
-        echo "Unknown option '$1'"
+        echo 1>&2 "E: Unknown ${name} option: '$1'"
         exit 1
     ;;
 esac
