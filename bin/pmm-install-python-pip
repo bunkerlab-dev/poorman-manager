@@ -72,7 +72,12 @@ case ${pyversion} in
 esac
 
 # Call `pip` and remove the cache afterwards.
-pip install --no-cache-dir --upgrade "pip < ${maxversion}"
+pip_flags=
+pip_major="$(pip -V | cut -d' ' -f2 | cut -d'.' -f1)"
+if [ ${pip_major} -ge 6 ]; then
+    pip_flags="--no-cache-dir"
+fi
+pip install ${pip_flags} --upgrade "pip < ${maxversion}"
 rm -rf ${HOME}/.cache/pip /tmp/pip-*
 
 # Remove Python byte-compiled files.
