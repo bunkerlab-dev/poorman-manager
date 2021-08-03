@@ -14,7 +14,7 @@ alias pmm="sh ${here}/pmm"
 
 # Check number of arguments.
 if [ $# -ne 0 ]; then
-    echo "E: The ${name} command takes no arguments"
+    echo 1>&2 "E: The ${name} command takes no arguments"
     exit 1
 fi
 
