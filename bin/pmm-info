@@ -17,26 +17,6 @@ _info_version() {
 }
 
 
-_info_os_package_manager() {
-    os_name="$(pmm system os-name)"
-    case "${os_name}" in
-        debian|ubuntu|trisquel)
-            echo "apt-get"
-        ;;
-        centos)
-            echo "yum"
-        ;;
-        opensuse*|sles)
-            echo "zypper"
-        ;;
-        *)
-            echo 1>&2 "E: Unknown operating system '${os_name}'"
-            echo ""
-        ;;
-    esac
-}
-
-
 _info_hdf4() {
     os_fullname="$(pmm system os-name)-$(pmm system os-version)"
     case "${os_fullname}" in
@@ -360,7 +340,7 @@ case "$1" in
         shift
         _info_openssl_root $@
     ;;
-    os-package-manager|profile|version)
+    profile|version)
         _info_$(echo $1 | tr - _)
     ;;
     pyenv-dev|pyenv-profile|pyenv-root)

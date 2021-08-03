@@ -63,7 +63,7 @@ while [ $# -gt 0 ]; do
                     pkglist="$1"
                 ;;
             esac
-            pkgman=$(pmm info os-package-manager)
+            pkgman=$(pmm system os-package-manager)
             case ${pkgman} in
                 apt-get)
                     aptversion=$(apt-get --version | head -n1 | cut -d' ' -f2)

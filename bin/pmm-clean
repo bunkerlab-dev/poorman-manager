@@ -27,7 +27,7 @@ else
 fi
 
 # Perform cleaning based on the package manager.
-pkgman=$(pmm info os-package-manager)
+pkgman=$(pmm system os-package-manager)
 case ${pkgman} in
     apt-get)
         ${sudocmd} ${pkgman} clean
