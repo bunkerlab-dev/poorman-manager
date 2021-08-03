@@ -14,7 +14,7 @@ alias pmm="sh ${here}/pmm"
 
 # Check number of arguments.
 if [ $# -ne 1 ]; then
-    echo "E: The ${name} command takes one argument"
+    echo 1>&2 "E: The ${name} command takes one argument"
     exit 1
 fi
 
@@ -28,18 +28,23 @@ fi
 
 # Apply disabling.
 case "$1" in
-    openssl-1.0.2|openssl-1.1.1)
-        sslpath=/usr/local/ssl
-        prefix=$(pmm info openssl-root $(echo $1 | cut -d- -f2))
+    openssl-1.0.2 | openssl-1.1.1)
+        sslpath="/usr/local/ssl"
+        sslvers="$(echo $1 | cut -d- -f2)"
+        prefix="$(pmm info openssl-root ${sslvers})"
+        # Check that the requested OpenSSL is actually enabled.
         if [ "$(readlink -f ${sslpath})" = "${prefix}" ]; then
-            ${sudocmd} rm ${sslpath}
-            if [ -d ${sslpath}.bak ]; then
-                ${sudocmd} mv ${sslpath}.bak ${sslpath}
+            ${sudocmd} rm "${sslpath}"
+            if [ -d "${sslpath}.bak" ]; then
+                ${sudocmd} mv "${sslpath}.bak" "${sslpath}"
             fi
+        else
+            echo 1>&2 "W: $1 is not enabled, skipping"
+            exit 0
         fi
     ;;
     *)
-        echo "Unknown option '$1'"
+        echo 1>&2 "E: Unknown ${name} option: '$1'"
         exit 1
     ;;
 esac
