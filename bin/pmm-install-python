@@ -14,7 +14,7 @@ alias pmm="sh ${here}/pmm"
 
 # Parse arguments.
 if [ $# -ne 1 ]; then
-    echo "E: The ${name} command takes one argument"
+    echo 1>&2 "E: The ${name} command takes one argument"
     exit 1
 fi
 
@@ -26,7 +26,8 @@ else
     sudocmd=
 fi
 
-version="$1"
+version=$(echo "$1" | cut -d'-' -f1)
+unicode=$(echo "$1" | cut -sd'-' -f2)
 case ${version} in
     2.6|\
     2.6.[0-9]|\
@@ -58,11 +59,21 @@ case ${version} in
         export GET_PIP_URL=
     ;;
     *)
-        echo "E: unsupported Python version: '${version}'"
+        echo 1>&2 "E: unsupported Python version: '${version}'"
         exit 1
     ;;
 esac
-package_openssl=openssl-${version_openssl}
+case ${unicode} in
+    ucs[24])
+        export PYTHON_CONFIGURE_OPTS="--enable-unicode=${unicode}"
+    ;;
+    *)
+        if [ ! -z "${unicode}" ]; then
+            echo 1>&2 "E: unsupported Python unicode configuration: '${unicode}'"
+            exit 1
+        fi
+    ;;
+esac
 
 # Install PyEnv if not present.
 pyenv_profile="$(pmm info pyenv-profile)"
@@ -85,6 +96,7 @@ esac
 
 # Install OpenSSL if not present.
 delete_openssl=0
+package_openssl=openssl-${version_openssl}
 if [ ! -d $(pmm info openssl-root ${version_openssl}) ]; then
     delete_openssl=1
     pmm install ${package_openssl}

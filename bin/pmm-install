@@ -46,7 +46,7 @@ while [ $# -gt 0 ]; do
             sh ${here}/pmm-install-$1
         ;;
         python-2.*|python-3.*)
-            sh ${here}/pmm-install-python "$(echo $1 | cut -d- -f2)"
+            sh ${here}/pmm-install-python "$(echo $1 | cut -d'-' -f2-)"
         ;;
         *)
             case "$1" in
