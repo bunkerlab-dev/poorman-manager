@@ -64,7 +64,7 @@ echo "Decompressing OpenSSL ${version}..."
 tar -xf ${pkgfile}
 
 # Find out the architecture without relying on the kernel.
-arch=$(pmm info os-arch)
+arch=$(pmm system os-arch)
 archopts=
 if [ "${arch}" = "amd64" ]; then
     archopts="linux-generic64 -m64"

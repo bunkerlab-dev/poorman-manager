@@ -119,7 +119,7 @@ fi
 pmm enable ${package_openssl}
 export CFLAGS="-I/usr/local/ssl/include"
 export LDFLAGS="-L/usr/local/ssl/lib -L/usr/lib"
-if [ "$(pmm info os-arch)" = "amd64" ]; then
+if [ "$(pmm system os-arch)" = "amd64" ]; then
     # Include location of `ffi.h` explicitly.
     export CPPFLAGS="-I/usr/include/x86_64-linux-gnu"
 fi

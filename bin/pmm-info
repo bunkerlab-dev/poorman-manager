@@ -17,30 +17,6 @@ _info_version() {
 }
 
 
-_info_os_arch() {
-    os_name="$(pmm system os-name)"
-    case "${os_name}" in
-        debian|ubuntu|trisquel)
-            echo $(dpkg --print-architecture)
-        ;;
-        centos|opensuse*|sles)
-            if [ -f /lib64/libc.so.6 ]; then
-                echo "amd64"
-            elif [ -f /lib/libc.so.6 ]; then
-                echo "i386"
-            else
-                echo 1>&2 "E: Unknown operating system architecture"
-                echo ""
-            fi
-        ;;
-        *)
-            echo 1>&2 "E: Unknown operating system '${os_name}'"
-            echo ""
-        ;;
-    esac
-}
-
-
 _info_os_package_manager() {
     os_name="$(pmm system os-name)"
     case "${os_name}" in
@@ -384,7 +360,7 @@ case "$1" in
         shift
         _info_openssl_root $@
     ;;
-    os-arch|os-package-manager|profile|version)
+    os-package-manager|profile|version)
         _info_$(echo $1 | tr - _)
     ;;
     pyenv-dev|pyenv-profile|pyenv-root)
