@@ -38,6 +38,7 @@ while [ $# -gt 0 ]; do
         ;;
         python-2.*|python-3.*)
             version="$(echo $1 | cut -d- -f2)"
+            unicode=$(echo "$1" | cut -sd'-' -f3)
             # Ensure PyEnv is enabled.
             if [ ! -x "$(command -v pyenv || true)" ]; then
                 . "$(pmm info pyenv-profile)"
@@ -49,8 +50,20 @@ while [ $# -gt 0 ]; do
                     version=$(pyenv install -l | grep "${regex}" | tail -n1 | xargs)
                 ;;
             esac
+            fullversion="${version}"
+            case ${unicode} in
+                ucs[24])
+                    fullversion="${fullversion}-${unicode}"
+                ;;
+                *)
+                    if [ ! -z "${unicode}" ]; then
+                        echo 1>&2 "E: unsupported Python unicode configuration: '${unicode}'"
+                        exit 1
+                    fi
+                ;;
+            esac
             # Uninstall the Python version through PyEnv.
-            yes | pyenv uninstall ${version}
+            yes | pyenv uninstall ${fullversion}
         ;;
         *)
             # Guess if we have sudo.

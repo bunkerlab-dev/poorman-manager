@@ -94,6 +94,12 @@ case ${version} in
     ;;
 esac
 
+# Define full version as complete Python version plus unicode flag if given.
+fullversion="${version}"
+if [ ! -z "${unicode}" ]; then
+    fullversion="${fullversion}-${unicode}"
+fi
+
 # Install OpenSSL if not present.
 delete_openssl=0
 package_openssl=openssl-${version_openssl}
@@ -127,7 +133,14 @@ if [ -f ${socketfile} ]; then
     fi
 fi
 
-# Install a specific Python version.
+# Symlink definition file if unicode flag is given.
+pydir="$(pmm info pyenv-root)/versions/${fullversion}"
+defdir="$(pmm info pyenv-root)/plugins/python-build/share/python-build"
+if [ ! -f "${defdir}/${fullversion}" ]; then
+    cp "${defdir}/${version}" "${defdir}/${fullversion}"
+fi
+
+# Install the specific Python version.
 pmm enable ${package_openssl}
 export CFLAGS="-I/usr/local/ssl/include"
 export LDFLAGS="-L/usr/local/ssl/lib -L/usr/lib"
@@ -135,11 +148,12 @@ if [ "$(pmm system os-arch)" = "amd64" ]; then
     # Include location of `ffi.h` explicitly.
     export CPPFLAGS="-I/usr/include/x86_64-linux-gnu"
 fi
-PATH="/usr/local/ssl/bin/openssl:${PATH}" pyenv install "${version}"
-echo "pyenv shell ${version}" | ${sudocmd} tee /etc/profile.d/01-pyenv-shell.sh >/dev/null
+PATH="/usr/local/ssl/bin/openssl:${PATH}" pyenv install "${fullversion}"
+
+# Save Python shell setup to profile scripts.
+echo "pyenv shell ${fullversion}" | ${sudocmd} tee /etc/profile.d/01-pyenv-shell.sh >/dev/null
 
 # Remove Python byte-compiled files.
-pydir="$(pmm info pyenv-root)/versions/${version}"
 find "${pydir}" -type f -name "*.pyc" | xargs rm -rf
 find "${pydir}" -type f -name "*.pyo" | xargs rm -rf
 find "${pydir}/lib" -type d -name "__pycache__" | xargs rm -rf
