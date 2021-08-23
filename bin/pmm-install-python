@@ -125,6 +125,7 @@ case ${kernel_version} in
             ;;
             3.[4-9].*)
                 pmm disable socket-can
+            ;;
         esac
     ;;
 esac
