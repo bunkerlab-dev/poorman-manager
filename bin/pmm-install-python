@@ -146,10 +146,38 @@ if [ "$(pmm system os-arch)" = "amd64" ]; then
     export CPPFLAGS="-I/usr/include/x86_64-linux-gnu"
 fi
 
-# Install the specific Python version.
+# Create temporary build directory and patch file for `_decimal` if needed.
 TMPDIR="$(mktemp -d /tmp/pmm-install-python-XXXXXXXX)"
+patchfile="${TMPDIR}/_decimal.patch"
+patchfold="$(pmm info pyenv-root)/plugins/python-build/share/python-build/patches/${version}/Python-${version}"
+touch "${patchfile}"
+if [ -d "${patchfold}" ]; then
+    find "${patchfold}" -maxdepth 1 -type f | sort | xargs cat >> "${patchfile}"
+fi
+case ${version} in
+    3.[3-9].*)
+        {
+            echo 'diff -r f7cebf727bc6 Modules/_decimal/libmpdec/constants.c'
+            echo '--- ./Modules/_decimal/libmpdec/constants.c  Mon 23 Aug 2021 20:33:10 CEST'
+            echo '+++ ./Modules/_decimal/libmpdec/constants.c  Mon 23 Aug 2021 20:33:10 CEST'
+            echo '@@ -71,6 +71,9 @@'
+            echo '   };'
+            echo ' '
+            echo '   /* magic number for constant division by MPD_RADIX */'
+            echo '+#if defined(__GNUC__) && (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3))'
+            echo '+ __attribute__((visibility("hidden")))'
+            echo '+#endif'
+            echo '   const mpd_uint_t mprime_rdx = 15581492618384294730ULL;'
+            echo ' '
+            echo ' #elif defined(CONFIG_32)'
+            echo '    ;;'
+        } >> "${patchfile}"
+    ;;
+esac
+
+# Install the specific Python version.
 PATH="/usr/local/ssl/bin/openssl:${PATH}" TMPDIR="${TMPDIR}"                  \
-    pyenv install "${fullversion}"
+    pyenv install --patch "${fullversion}" < "${patchfile}"
 cp ${TMPDIR}/python-build.*.log "${pydir}/${fullversion}.log"
 rm -rf ${TMPDIR}
 
