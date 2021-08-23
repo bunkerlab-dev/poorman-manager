@@ -149,6 +149,7 @@ fi
 TMPDIR="$(mktemp -d /tmp/pmm-install-python-XXXXXXXX)"
 PATH="/usr/local/ssl/bin/openssl:${PATH}" TMPDIR="${TMPDIR}"                  \
     pyenv install "${fullversion}"
+cp ${TMPDIR}/python-build.*.log "${pydir}/${fullversion}.log"
 rm -rf ${TMPDIR}
 
 # Save Python shell setup to profile scripts.
