@@ -116,22 +116,18 @@ case ${version} in
 esac
 
 # Fix possible bug in libc6 headers that prevents `socket` from being built.
-socketfile=/usr/include/bits/socket.h
-if [ -f ${socketfile} ]; then
-    line1=
-    line2=
-    if [ -z "$(grep '^#define.PF_CAN.*' ${socketfile})" ]; then
-        line1='#define PF_CAN          29      \/\* Controller Area Network \*\/'
-        ${sudocmd} sed -i "/^#define.PF_WANPIPE.*/a ${line1}" ${socketfile}
-    fi
-    if [ -z "$(grep '^#define.AF_CAN.*' ${socketfile})" ]; then
-        line2='#define AF_CAN          PF_CAN'
-        ${sudocmd} sed -i "/^#define.AF_WANPIPE.*/a ${line2}" ${socketfile}
-    fi
-    if [ ! -z "${line1}" -o ! -z "${line2}" ]; then
-        echo "Patched ${socketfile}..."
-    fi
-fi
+kernel_version=$(pmm system kernel-version)
+case ${kernel_version} in
+    2.6.[0-9]|2.6.1[0-9]|2.6.2[0-4])
+        case ${version} in
+            3.[0-3].*)
+                pmm enable socket-can
+            ;;
+            3.[4-9].*)
+                pmm disable socket-can
+        esac
+    ;;
+esac
 
 # Symlink definition file if unicode flag is given.
 pydir="$(pmm info pyenv-root)/versions/${fullversion}"
