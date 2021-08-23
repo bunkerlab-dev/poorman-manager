@@ -12,6 +12,32 @@ name=$(readlink -f "$0" | xargs basename)
 alias pmm="sh ${here}/pmm"
 
 
+_system_kernel_version() {
+    if [ ! -f "/.dockerenv" ]; then
+        echo "$(uname -r | cut -d'-' -f1)"
+    else
+        os_name="$(_system_os_name)"
+        case "${os_name}" in
+            debian | ubuntu | trisquel)
+                pmm update 1>/dev/null 2>&1
+                version=$(apt-cache search linux-headers |
+                          grep -Ee 'linux-headers-[0-9\.]*-[0-9]+ ' |
+                          tail -n1 | cut -d' ' -f1 | cut -d'-' -f3)
+                if [ -z "${version}" ]; then
+                    echo 1>&2 "W: Cannot find kernel version"
+                fi
+                pmm clean 1>/dev/null 2>&1
+                echo "${version}"
+            ;;
+            *)
+                echo 1>&2 "W: Cannot find kernel version"
+                echo ""
+            ;;
+        esac
+    fi
+}
+
+
 _system_os_name() {
     if [ -f "/etc/os-release" ]; then
         echo $(grep ^ID= /etc/os-release |
@@ -84,7 +110,7 @@ _system_os_package_manager() {
 
 # Main script.
 case "$1" in
-    os-name | os-version | os-arch | os-package-manager)
+    kernel-version | os-name | os-version | os-arch | os-package-manager)
         _system_$(echo $1 | tr - _)
     ;;
     *)
