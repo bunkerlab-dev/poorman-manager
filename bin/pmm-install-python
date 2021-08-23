@@ -148,9 +148,9 @@ fi
 case ${version} in
     3.[3-9].*)
         {
-            echo 'diff -r f7cebf727bc6 Modules/_decimal/libmpdec/constants.c'
-            echo '--- ./Modules/_decimal/libmpdec/constants.c  Mon 23 Aug 2021 20:33:10 CEST'
-            echo '+++ ./Modules/_decimal/libmpdec/constants.c  Mon 23 Aug 2021 20:33:10 CEST'
+            echo 'diff -r ../orig/Modules/_decimal/libmpdec/constants.c ./Modules/_decimal/libmpdec/constants.c'
+            echo '--- ../orig/Modules/_decimal/libmpdec/constants.c  Mon 23 Aug 2021 20:33:10 CEST'
+            echo '+++ ./Modules/_decimal/libmpdec/constants.c        Mon 23 Aug 2021 20:33:10 CEST'
             echo '@@ -71,6 +71,9 @@'
             echo '   };'
             echo ' '
