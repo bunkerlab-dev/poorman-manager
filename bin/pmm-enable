@@ -41,6 +41,35 @@ case "$1" in
         fi
         ${sudocmd} ln -s "${prefix}" "${sslpath}"
     ;;
+    socket-can)
+        socketfile=$(find /usr/include -wholename '*/bits/socket.h' | head -n1)
+        if [ ! -f "${socketfile}" ]; then
+            echo 1>&2 "W: libc6 headers not found, socket-can enabling ignored"
+            exit 0
+        else
+            line1=
+            line2=
+            # Uncomment first line if present, otherwise add it.
+            if [ ! -z "$(grep '^//#define.PF_CAN.*' ${socketfile})" ]; then
+                line1='#define PF_CAN          29      \/\* Controller Area Network \*\/'
+                ${sudocmd} sed -i "s|^//\(#define.PF_CAN.*\)|\1|" ${socketfile}
+            elif [ -z "$(grep '^#define.PF_CAN.*' ${socketfile})" ]; then
+                line1='#define PF_CAN          29      \/\* Controller Area Network \*\/'
+                ${sudocmd} sed -i "/^#define.PF_WANPIPE.*/a ${line1}" ${socketfile}
+            fi
+            # Uncomment second line if present, otherwise add it.
+            if [ ! -z "$(grep '^//#define.AF_CAN.*' ${socketfile})" ]; then
+                line2='#define AF_CAN          PF_CAN'
+                ${sudocmd} sed -i "s|^//\(#define.AF_CAN.*\)|\1|" ${socketfile}
+            elif [ -z "$(grep '^#define.AF_CAN.*' ${socketfile})" ]; then
+                line2='#define AF_CAN          PF_CAN'
+                ${sudocmd} sed -i "/^#define.AF_WANPIPE.*/a ${line2}" ${socketfile}
+            fi
+            if [ ! -z "${line1}" -o ! -z "${line2}" ]; then
+                echo "Patched ${socketfile}..."
+            fi
+        fi
+    ;;
     *)
         echo 1>&2 "E: Unknown ${name} option: '$1'"
         exit 1
