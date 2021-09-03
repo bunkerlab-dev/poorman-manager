@@ -254,26 +254,29 @@ _info_pyenv_dev() {
         debian-4.0*)
             echo "
                 build-essential libncursesw5-dev libreadline-dev              \
-                libgdbm-dev libsqlite3-dev libffi-dev zlib1g-dev libbz2-dev   \
+                libdb4.4-dev libgdbm-dev libsqlite3-dev libffi-dev            \
+                zlib1g-dev libbz2-dev                                         \
             " | xargs
         ;;
         debian-5.0*|ubuntu-*|trisquel-*)
             echo "
                 build-essential tk-dev libncursesw5-dev libreadline-dev       \
-                libgdbm-dev libsqlite3-dev libffi-dev xz-utils zlib1g-dev     \
-                libbz2-dev liblzma-dev                                        \
+                libdb-dev libgdbm-dev libsqlite3-dev libffi-dev               \
+                zlib1g-dev libbz2-dev liblzma-dev xz-utils                    \
             " | xargs
         ;;
         centos-*)
             echo "
-                @development findutils llvm readline-devel gdbm-devel         \
-                sqlite-devel libffi-devel xz-devel bzip2-devel zlib-devel     \
+                @development findutils llvm readline-devel                    \
+                libdb-devel gdbm-devel sqlite-devel libffi-devel              \
+                zlib-devel bzip2-devel xz-devel                               \
             " | xargs
         ;;
         opensuse*-*|sles-*)
             echo "
-                automake tk-devel ncurses-devel readline-devel gdbm-devel     \
-                sqlite3-devel libffi-devel xz-devel libbz2-devel zlib-devel
+                automake tk-devel ncurses-devel readline-devel                \
+                libdb-4_8-devel gdbm-devel sqlite3-devel libffi-devel         \
+                zlib-devel libbz2-devel xz-devel                              \
             " | xargs
         ;;
         *)
