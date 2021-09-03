@@ -140,7 +140,7 @@ fi
 
 # Create temporary build directory and set patches (from PyEnv and custom).
 tmpdir="$(mktemp -d /tmp/pmm-install-python-XXXXXXXX)"
-patchfile="${tmpdir}/_decimal.patch"
+patchfile="${tmpdir}/python-${version}.patch"
 patchfold="${defdir}/patches/${version}/Python-$(echo ${version} | sed 's|\(.*\)\.0$|\1|')"
 touch "${patchfile}"
 case ${version} in
