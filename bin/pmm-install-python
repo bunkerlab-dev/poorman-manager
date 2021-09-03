@@ -137,12 +137,13 @@ if [ ! -f "${defdir}/${fullversion}" ]; then
     cp "${defdir}/${version}" "${defdir}/${fullversion}"
 fi
 
-# Create temporary build directory and patch file for `_decimal` if needed.
+# Create temporary build directory and set patches (from PyEnv and custom).
 tmpdir="$(mktemp -d /tmp/pmm-install-python-XXXXXXXX)"
 patchfile="${tmpdir}/_decimal.patch"
 patchfold="$(pmm info pyenv-root)/plugins/python-build/share/python-build/patches/${version}/Python-${version}"
 touch "${patchfile}"
 case ${version} in
+    # Patch file for `linuxaudiodev` and `ossaudiodev` and newer Linux kernel.
     2.6.*)
         patchline=
         case ${version} in
@@ -177,6 +178,34 @@ case ${version} in
             } >> "${patchfile}"
         fi
     ;;
+    # Patch file for `ossaudiodev` and newer Linux kernel.
+    3.1.*)
+        patchline=
+        case ${version} in
+            3.1.[01])  patchline=1203 ;;
+            3.1.2)     patchline=1207 ;;
+            3.1.3)     patchline=1321 ;;
+            3.1.[45])  patchline=1344 ;;
+        esac
+        if [ ! -z "${patchline}" ]; then
+            {
+                echo "diff -r ../orig/setup.py ./setup.py"
+                echo "--- ../orig/setup.py  2012-04-10 01:25:37.000000000 +0200"
+                echo "+++ ./setup.py        2021-09-03 10:16:58.575042300 +0200"
+                echo "@@ -1344,8 +1344,7 @@"
+                echo "         # End multiprocessing"
+                echo " "
+                echo "         # Platform-specific libraries"
+                echo "-        if platform in ('linux2', 'freebsd4', 'freebsd5', 'freebsd6',"
+                echo "-                        'freebsd7', 'freebsd8'):"
+                echo "+        if platform.startswith('linux') or platform.startswith('freebsd'):"
+                echo "             exts.append( Extension('ossaudiodev', ['ossaudiodev.c']) )"
+                echo "         else:"
+                echo "             missing.append('ossaudiodev')"
+            } >> "${patchfile}"
+        fi
+    ;;
+    # Patch file for `_decimal` and old GNU GCC.
     3.[3-9].*)
         {
             echo 'diff -r ../orig/Modules/_decimal/libmpdec/constants.c ./Modules/_decimal/libmpdec/constants.c'
