@@ -27,16 +27,17 @@ else
 fi
 
 # Download and install PyEnv.
-echo "Downloading PyEnv..."
 pyenv_root="$(pmm info pyenv-root)"
 
 cwd="$(pwd)"
 tmpdir="$(mktemp -d)"
 cd ${tmpdir}
-wget -q https://github.com/pyenv/pyenv/archive/master.tar.gz -O pyenv.tar.gz
 
+echo "Downloading PyEnv..."
+branch="master"
+wget -q https://github.com/pyenv/pyenv/archive/refs/heads/${branch}.tar.gz -O pyenv.tar.gz
 echo "Installing PyEnv..."
-tar -xf pyenv.tar.gz && mv pyenv-master "${pyenv_root}"
+tar -xf pyenv.tar.gz && mv "pyenv-${branch}" "${pyenv_root}"
 cd ${cwd}
 rm -rf ${tmpdir}
 
