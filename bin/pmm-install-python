@@ -131,8 +131,9 @@ case ${kernel_version} in
 esac
 
 # Symlink definition file if unicode flag is given.
-pydir="$(pmm info pyenv-root)/versions/${fullversion}"
-defdir="$(pmm info pyenv-root)/plugins/python-build/share/python-build"
+pyenv_root="$(pmm info pyenv-root)"
+pydir="${pyenv_root}/versions/${fullversion}"
+defdir="${pyenv_root}/plugins/python-build/share/python-build"
 if [ ! -f "${defdir}/${fullversion}" ]; then
     cp "${defdir}/${version}" "${defdir}/${fullversion}"
 fi
@@ -140,7 +141,7 @@ fi
 # Create temporary build directory and set patches (from PyEnv and custom).
 tmpdir="$(mktemp -d /tmp/pmm-install-python-XXXXXXXX)"
 patchfile="${tmpdir}/_decimal.patch"
-patchfold="$(pmm info pyenv-root)/plugins/python-build/share/python-build/patches/${version}/Python-${version}"
+patchfold="${defdir}/patches/${version}/Python-$(echo ${version} | sed 's|\(.*\)\.0$|\1|')"
 touch "${patchfile}"
 case ${version} in
     # Patch file for `linuxaudiodev` and `ossaudiodev` and newer Linux kernel.
