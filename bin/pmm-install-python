@@ -144,41 +144,6 @@ patchfile="${tmpdir}/python-${version}.patch"
 patchfold="${defdir}/patches/${version}/Python-$(echo ${version} | sed 's|\(.*\)\.0$|\1|')"
 touch "${patchfile}"
 case ${version} in
-    # Patch file for `linuxaudiodev` and `ossaudiodev` and newer Linux kernel.
-    2.6.*)
-        patchline=
-        case ${version} in
-            2.6.0)     patchline=1308 ;;
-            2.6.1)     patchline=1310 ;;
-            2.6.[2-4]) patchline=1331 ;;
-            2.6.5)     patchline=1339 ;;
-            2.6.[6-9]) patchline=1443 ;;
-        esac
-        if [ ! -z "${patchline}" ]; then
-            {
-                echo "diff -r ../orig/setup.py ./setup.py"
-                echo "--- ../orig/setup.py  2013-10-29 16:04:39.000000000 +0100"
-                echo "+++ ./setup.py        2021-09-02 19:55:33.273226000 +0200"
-                echo "@@ -${patchline},14 +${patchline},13 @@"
-                echo " "
-                echo " "
-                echo "         # Platform-specific libraries"
-                echo "-        if platform == 'linux2':"
-                echo "+        if platform.startswith('linux'):"
-                echo "             # Linux-specific modules"
-                echo "             exts.append( Extension('linuxaudiodev', ['linuxaudiodev.c']) )"
-                echo "         else:"
-                echo "             missing.append('linuxaudiodev')"
-                echo " "
-                echo "-        if platform in ('linux2', 'freebsd4', 'freebsd5', 'freebsd6',"
-                echo "-                        'freebsd7', 'freebsd8'):"
-                echo "+        if platform.startswith('linux') or platform.startswith('freebsd'):"
-                echo "             exts.append( Extension('ossaudiodev', ['ossaudiodev.c']) )"
-                echo "         else:"
-                echo "             missing.append('ossaudiodev')"
-            } >> "${patchfile}"
-        fi
-    ;;
     # Patch file for `_decimal` and old GNU GCC.
     3.[3-9].*)
         {
