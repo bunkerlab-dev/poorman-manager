@@ -267,7 +267,7 @@ case ${version} in
             # Do it again because sometimes PyEnv does not use `GET_PIP_URL`.
             echo "Installing custom pip..."
             cwd="$(pwd)"
-            tmpdir="$(mktemp -d)"
+            tmpdir="$(mktemp -d /tmp/pmm-install-pip-XXXXXXXX)"
             cd "${tmpdir}"
             wget -q "${GET_PIP_URL}"
             python "$(basename ${GET_PIP_URL})"
