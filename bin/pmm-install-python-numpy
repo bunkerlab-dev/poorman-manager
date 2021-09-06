@@ -39,25 +39,25 @@ if [ ! -x "$(command -v pip || true)" ]; then
 fi
 
 # Define library version limit based on the Python version.
-pyversion=$(python -V 2>&1 | cut -d' ' -f2)
+pyversion=$(python -V 2>&1 | cut -d' ' -f2 | cut -d'.' -f1,2)
 case ${pyversion} in
-    2.6.*|3.2.*|3.3.*)
+    2.6|3.2|3.3)
         maxversion=1.12
         # NumPy < 1.12 needs `xlocale.h`.
         if [ ! -f /usr/include/xlocale.h ]; then
             ln -s /usr/include/locale.h /usr/include/xlocale.h
         fi
     ;;
-    2.7.*|3.4.*)
+    2.7|3.4)
         maxversion=1.17
     ;;
-    3.5.*)
+    3.5)
         maxversion=1.19
     ;;
-    3.6.*)
+    3.6)
         maxversion=1.20
     ;;
-    3.7.*|3.8.*|3.9.*)
+    3.7|3.8|3.9)
         maxversion=1.21
     ;;
     *)
