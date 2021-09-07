@@ -94,7 +94,11 @@ _system_os_package_manager() {
     os_fullname="$(_system_os_name)-$(_system_os_version)"
     case "${os_fullname}" in
         debian-4.0*)
-            echo "aptitude"
+            if [ -z "$(command -v aptitude)" ]; then
+                echo "apt-get"
+            else
+                echo "aptitude"
+            fi
         ;;
         debian-* | ubuntu-* | trisquel-*)
             echo "apt-get"
