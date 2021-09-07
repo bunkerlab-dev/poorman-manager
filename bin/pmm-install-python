@@ -65,13 +65,27 @@ case ${version} in
 esac
 case ${unicode} in
     ucs[24])
-        export PYTHON_CONFIGURE_OPTS="--enable-unicode=${unicode}"
+        case ${version} in
+            3.[12]|3.1.[0-5]|3.2.[0-6])
+                if [ "${unicode}" = "ucs4" ]; then
+                    export PYTHON_CONFIGURE_OPTS="--with-wide-unicode"
+                fi
+            ;;
+            *)
+                export PYTHON_CONFIGURE_OPTS="--enable-unicode=${unicode}"
+            ;;
+        esac
     ;;
     *)
         if [ ! -z "${unicode}" ]; then
             echo 1>&2 "E: unsupported Python unicode configuration: '${unicode}'"
             exit 1
         fi
+        case ${version} in
+            3.[12]|3.1.[0-5]|3.2.[0-6])
+                export PYTHON_CONFIGURE_OPTS="--with-wide-unicode"
+            ;;
+        esac
     ;;
 esac
 
