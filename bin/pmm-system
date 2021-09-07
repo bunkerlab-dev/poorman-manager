@@ -13,9 +13,11 @@ alias pmm="sh ${here}/pmm"
 
 
 _system_kernel_version() {
-    if [ ! -f "/.dockerenv" ]; then
+    if [ -z "$(grep /proc/1/cgroup -Ee 'docker|containerd\.service')" ]; then
+        # We are not inside Docker.
         echo "$(uname -r | cut -d'-' -f1)"
     else
+        # We are inside Docker.
         os_name="$(_system_os_name)"
         case "${os_name}" in
             debian | ubuntu | trisquel)
