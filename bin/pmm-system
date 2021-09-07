@@ -91,9 +91,12 @@ _system_os_arch() {
 
 
 _system_os_package_manager() {
-    os_name="$(_system_os_name)"
-    case "${os_name}" in
-        debian | ubuntu | trisquel)
+    os_fullname="$(_system_os_name)-$(_system_os_version)"
+    case "${os_fullname}" in
+        debian-4.0*)
+            echo "aptitude"
+        ;;
+        debian-* | ubuntu-* | trisquel-*)
             echo "apt-get"
         ;;
         centos)
@@ -103,7 +106,7 @@ _system_os_package_manager() {
             echo "zypper"
         ;;
         *)
-            echo 1>&2 "E: Unknown operating system: '${os_name}'"
+            echo 1>&2 "E: Unknown operating system: '${os_fullname}'"
             exit 1
         ;;
     esac

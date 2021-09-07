@@ -76,6 +76,9 @@ while [ $# -gt 0 ]; do
                         ;;
                     esac
                 ;;
+                aptitude)
+                    norecommends=--without-recommends
+                ;;
                 zypper)
                     norecommends=--no-recommends
                 ;;

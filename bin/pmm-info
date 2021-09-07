@@ -253,8 +253,8 @@ _info_pyenv_dev() {
     case "${os_fullname}" in
         debian-4.0*)
             echo "
-                build-essential libncursesw5-dev libreadline-dev              \
-                libdb4.4-dev libgdbm-dev libsqlite3-dev libffi-dev            \
+                build-essential libncursesw5-dev libreadline5-dev             \
+                libdb4.4-dev libgdbm-dev libsqlite3-dev libffi4-dev           \
                 zlib1g-dev libbz2-dev                                         \
             " | xargs
         ;;

@@ -101,6 +101,10 @@ while [ $# -gt 0 ]; do
                         ;;
                     esac
                 ;;
+                aptitude)
+                    remove="purge"
+                    autoremove=
+                ;;
                 yum)
                     remove="remove"
                     autoremove="autoremove"
