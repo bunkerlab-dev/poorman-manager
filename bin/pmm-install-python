@@ -144,6 +144,23 @@ patchfile="${tmpdir}/python-${version}.patch"
 patchfold="${defdir}/patches/${version}/Python-$(echo ${version} | sed 's|\(.*\)\.0$|\1|')"
 touch "${patchfile}"
 case ${version} in
+    # Patch build bug in `ossaudiodev`.
+    3.2.[01])
+        {
+            echo "--- setup.py.orig  2010-12-28 10:51:43.000000000 +0100"
+            echo "+++ setup.py       2021-09-07 09:49:48.448565000 +0200"
+            echo "@@ -1352,8 +1352,7 @@"
+            echo "         # End multiprocessing"
+            echo " "
+            echo "         # Platform-specific libraries"
+            echo "-        if (platform in ('linux2', 'freebsd4', 'freebsd5', 'freebsd6',"
+            echo "-                        'freebsd7', 'freebsd8')"
+            echo "+        if (platform.startswith('linux') or platform.startswith('freebsd')"
+            echo '             or platform.startswith("gnukfreebsd")):'
+            echo "             exts.append( Extension('ossaudiodev', ['ossaudiodev.c']) )"
+            echo "         else:"
+        } >> ${patchfile}
+    ;;
     # Patch encoding error in `distutils`.
     3.2.2)
         {
