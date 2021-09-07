@@ -104,6 +104,26 @@ while [ $# -gt 0 ]; do
                 aptitude)
                     remove="purge"
                     autoremove=
+                    # Handle special case of `aptitude` removing itself.
+                    filtered_pkglist="$(echo $pkglist | sed                   \
+                        -e 's/^[[:blank:]]\?aptitude[[:blank:]]\?//g'         \
+                        -e 's/[[:blank:]]\?aptitude[[:blank:]]$//g'           \
+                        -e 's/[[:blank:]]aptitude[[:blank:]]/ /g')"
+                    if [ "${pkglist}" != "${filtered_pkglist}" ]; then
+                        if [ ! -z "${filtered_pkglist}" ]; then
+                            pmm remove "${filtered_pkglist}"
+                        fi
+                        apt-get remove --purge -y aptitude
+                        ${sudocmd} rm -rf /var/lib/aptitude
+                        pkgdep1="$(dpkg -l | grep '^i.* libncursesw5 '        \
+                                           | cut -c5- | cut -d' ' -f1)"
+                        pkgdep2="$(dpkg -l | grep '^i.* libsigc++-2.0-.* '    \
+                                           | cut -c5- | cut -d' ' -f1)"
+                        if [ ! -z "${pkgdep1}${pkgdep2}" ]; then
+                            pmm remove "${pkgdep1} ${pkgdep2}"
+                        fi
+                        exit 0
+                    fi
                 ;;
                 yum)
                     remove="remove"
