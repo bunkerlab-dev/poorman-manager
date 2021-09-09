@@ -40,6 +40,21 @@ _system_kernel_version() {
 }
 
 
+_system_perl_version() {
+    if [ -z "$(command -v perl)" ]; then
+        echo 1>&2 "E: Cannot find perl"
+        exit 1
+    fi
+    version=$(perl --version | head -n2 | tail -n1 |
+              sed 's|.*[ (]v\([0-9]\+\.[0-9]\+\.[0-9]\+\)[ )].*|\1|')
+    if [ -z "${version}" ]; then
+        echo 1>&2 "E: cannot parse perl version"
+        exit 1
+    fi
+    echo "${version}"
+}
+
+
 _system_os_name() {
     if [ -f "/etc/os-release" ]; then
         echo $(grep ^ID= /etc/os-release |
@@ -119,6 +134,9 @@ _system_os_package_manager() {
 
 # Main script.
 case "$1" in
+    kernel-version | perl-version)
+        _system_$(echo $1 | tr - _)
+    ;;
     kernel-version | os-name | os-version | os-arch | os-package-manager)
         _system_$(echo $1 | tr - _)
     ;;
