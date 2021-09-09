@@ -59,8 +59,8 @@ arch=$(pmm system os-arch)
 # Now go to the config + make + make install.
 echo "Configuring ffi ${version} (arch: ${arch})..."
 cd ${pkgname}
-./configure --prefix=${prefix} --disable-shared                               \
-            --with-gcc-arch=native 1>${tmplog} 2>&1
+CFLAGS=-fPIC ./configure --prefix=${prefix} --disable-shared                               \
+                         --with-gcc-arch=native 1>${tmplog} 2>&1
 
 echo "Building ffi ${version}..."
 make -s 1>>${tmplog} 2>&1
