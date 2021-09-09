@@ -132,9 +132,19 @@ if [ ! -d $(pmm info openssl-root ${version_openssl}) ]; then
 fi
 
 # Install `libffi` manually for Python 3.6 or greater.
+delete_ffi=0
 case ${version} in
     3.[6-9].*)
-        pmm install libffi
+        if [ ! -d $(pmm info ffi-root) ]; then
+            delete_ffi=1
+            pmm install ffi
+        fi
+        export CPPFLAGS="${CPPFLAGS} -I$(pmm info ffi-root)/include"
+        if [ "$(pmm system os-arch)" = "amd64" ]; then
+            export LDFLAGS="${LDFLAGS} -L$(pmm info ffi-root)/lib64"
+        else
+            export LDFLAGS="${LDFLAGS} -L$(pmm info ffi-root)/lib"
+        fi
     ;;
 esac
 
@@ -317,12 +327,8 @@ fi
 # Prepare environment variables before installing Python.
 pmm enable ${package_openssl}
 export TMPDIR="${tmpdir}"
-export CFLAGS="-I/usr/local/ssl/include"
-export LDFLAGS="-L/usr/local/ssl/lib -L/usr/lib"
-if [ "$(pmm system os-arch)" = "amd64" ]; then
-    # Include location of `ffi.h` explicitly.
-    export CPPFLAGS="-I/usr/include/x86_64-linux-gnu"
-fi
+export CFLAGS="${CFLAGS} -I/usr/local/ssl/include"
+export LDFLAGS="${LDFLAGS} -L/usr/local/ssl/lib"
 
 # Install the specific Python version.
 PATH="/usr/local/ssl/bin/openssl:${PATH}"                  \
@@ -352,6 +358,11 @@ find "${pydir}/bin" -name "idle*" | xargs rm -rf
 find "${pydir}/lib" -type d -name "idlelib" | xargs rm -rf
 find "${pydir}/lib" -type d -name "turtledemo" | xargs rm -rf
 rm -f ${pydir}/lib/*/turtle.py
+
+# Remove ffi if installed on the fly.
+if [ ${delete_ffi} -eq 1 ]; then
+    pmm remove ffi
+fi
 
 # Remove OpenSSL if installed on the fly.
 pmm disable ${package_openssl}
