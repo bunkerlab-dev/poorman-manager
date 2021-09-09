@@ -39,7 +39,7 @@ if [ ! -x "$(command -v pip || true)" ]; then
 fi
 
 # Define library version limit based on the Python version.
-pyversion=$(python -V 2>&1 | cut -d' ' -f2 | cut -d'.' -f1,2)
+pyversion=$(python -V 2>&1 | head -n1 | cut -d' ' -f2 | cut -d'.' -f1,2)
 case ${pyversion} in
     2.6)
         maxversion=37
