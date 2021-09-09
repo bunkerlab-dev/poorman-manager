@@ -179,6 +179,11 @@ _info_openssl_root() {
 }
 
 
+_info_ffi_root() {
+    echo /opt/ffi
+}
+
+
 _info_gcc_full() {
     os_fullname="$(pmm system os-name)-$(pmm system os-version)"
     case "${os_fullname}" in
@@ -346,7 +351,7 @@ case "$1" in
     profile|version)
         _info_$(echo $1 | tr - _)
     ;;
-    pyenv-dev|pyenv-profile|pyenv-root)
+    pyenv-dev|pyenv-profile|pyenv-root|ffi-root)
         _info_$(echo $1 | tr - _)
     ;;
     *)

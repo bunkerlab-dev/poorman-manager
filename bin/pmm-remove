@@ -22,6 +22,9 @@ fi
 repo_remove=0
 while [ $# -gt 0 ]; do
     case "$1" in
+        ffi)
+            rm -r "$(pmm info ffi-root)"
+        ;;
         openssl-1.0.2|openssl-1.1.1)
             rm -r "$(pmm info openssl-root $(echo $1 | cut -d- -f2))"
         ;;
