@@ -140,10 +140,9 @@ case ${version} in
             pmm install ffi
         fi
         export CPPFLAGS="${CPPFLAGS} -I$(pmm info ffi-root)/include"
+        export LDFLAGS="${LDFLAGS} -L$(pmm info ffi-root)/lib"
         if [ "$(pmm system os-arch)" = "amd64" ]; then
             export LDFLAGS="${LDFLAGS} -L$(pmm info ffi-root)/lib64"
-        else
-            export LDFLAGS="${LDFLAGS} -L$(pmm info ffi-root)/lib"
         fi
     ;;
 esac
