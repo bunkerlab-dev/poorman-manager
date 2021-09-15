@@ -6,6 +6,9 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- Package translations for Debian 6.0.
+
 ## [0.2.0] - 2021-09-10
 
 ### Added
