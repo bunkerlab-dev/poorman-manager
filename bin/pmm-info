@@ -271,7 +271,7 @@ _info_pyenv_dev() {
         ;;
         debian-[56].0* | ubuntu-* | trisquel-*)
             echo "
-                build-essential tk-dev libncursesw5-dev libreadline-dev       \
+                build-essential libncursesw5-dev libreadline-dev              \
                 libdb-dev libgdbm-dev libsqlite3-dev                          \
                 zlib1g-dev libbz2-dev liblzma-dev xz-utils                    \
             " | xargs

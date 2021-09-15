@@ -9,6 +9,9 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 - Package translations for Debian 6.0.
 
+### Removed
+- Remove `tk-dev` for `pyenv-dev` in Debian-like systems.
+
 ## [0.2.0] - 2021-09-10
 
 ### Added
