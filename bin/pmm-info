@@ -273,7 +273,7 @@ _info_pyenv_dev() {
             echo "
                 build-essential libncursesw5-dev libreadline-dev              \
                 libdb-dev libgdbm-dev libsqlite3-dev                          \
-                zlib1g-dev libbz2-dev liblzma-dev xz-utils                    \
+                zlib1g-dev libbz2-dev liblzma-dev                             \
             " | xargs
         ;;
         centos-*)
