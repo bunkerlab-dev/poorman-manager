@@ -9,6 +9,10 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 - Package translations for Debian 6.0.
 
+### Changed
+- Remove system `xz-utils` as `pyenv-dev` dependency and instead compile
+  `xz-utils` from source when compiling Python 3.3+.
+
 ### Removed
 - Remove `tk-dev` and `xz-utils` for `pyenv-dev` in Debian-like systems.
 

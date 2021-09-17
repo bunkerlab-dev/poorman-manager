@@ -131,6 +131,20 @@ if [ ! -d $(pmm info openssl-root ${version_openssl}) ]; then
     pmm install ${package_openssl}
 fi
 
+# Install `xz` manually for Python 3.3 or greater.
+delete_xz=0
+case ${version} in
+    3.[3-9].*)
+        if [ ! -d $(pmm info xz-utils-root) ]; then
+            delete_xz=1
+            pmm install xz-utils
+        fi
+        export CFLAGS="${CFLAGS} -I$(pmm info xz-utils-root)/include"
+        export CPPFLAGS="${CPPFLAGS} -I$(pmm info xz-utils-root)/include"
+        export LDFLAGS="${LDFLAGS} -L$(pmm info xz-utils-root)/lib"
+    ;;
+esac
+
 # Install `libffi` manually for Python 3.6 or greater.
 delete_ffi=0
 case ${version} in
@@ -357,6 +371,11 @@ find "${pydir}/bin" -name "idle*" | xargs rm -rf
 find "${pydir}/lib" -type d -name "idlelib" | xargs rm -rf
 find "${pydir}/lib" -type d -name "turtledemo" | xargs rm -rf
 rm -f ${pydir}/lib/*/turtle.py
+
+# Remove xz-utils if installed on the fly.
+if [ ${delete_xz} -eq 1 ]; then
+    pmm remove xz-utils
+fi
 
 # Remove ffi if installed on the fly.
 if [ ${delete_ffi} -eq 1 ]; then
