@@ -20,7 +20,7 @@ fi
 
 # Define remote url and installation prefix.
 version="5.2.5"
-remote="https://tukaani.org/xz"
+remote="https://netcologne.dl.sourceforge.net/project/lzmautils"
 pkgname="xz-${version}"
 pkgfile="${pkgname}.tar.gz"
 prefix=$(pmm info xz-utils-root)
