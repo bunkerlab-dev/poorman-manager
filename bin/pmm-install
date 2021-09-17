@@ -36,7 +36,7 @@ while [ $# -gt 0 ]; do
         openssl-1.1.1)
             sh ${here}/pmm-install-openssl 1.1.1k
         ;;
-        ffi|pyenv)
+        ffi|pyenv|xz-utils)
             sh ${here}/pmm-install-$1
         ;;
         python-pip|python-setuptools|python-wheel)

@@ -190,6 +190,11 @@ _info_ffi_root() {
 }
 
 
+_info_xz_utils_root() {
+    echo /opt/xz-utils
+}
+
+
 _info_gcc_full() {
     os_fullname="$(pmm system os-name)-$(pmm system os-version)"
     case "${os_fullname}" in
@@ -357,7 +362,7 @@ case "$1" in
     profile|version)
         _info_$(echo $1 | tr - _)
     ;;
-    pyenv-dev|pyenv-profile|pyenv-root|ffi-root)
+    pyenv-dev|pyenv-profile|pyenv-root|ffi-root|xz-utils-root)
         _info_$(echo $1 | tr - _)
     ;;
     *)
