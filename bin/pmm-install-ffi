@@ -20,7 +20,7 @@ fi
 
 # Define remote url and installation prefix.
 version="3.4.2"
-remote="https://github.com/libffi/libffi/releases/download/v${version}/"
+remote="https://github.com/libffi/libffi/releases/download/v${version}"
 pkgname="libffi-${version}"
 pkgfile="${pkgname}.tar.gz"
 prefix=$(pmm info ffi-root)
