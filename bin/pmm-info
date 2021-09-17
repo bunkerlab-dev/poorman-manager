@@ -285,14 +285,14 @@ _info_pyenv_dev() {
             echo "
                 @development findutils llvm readline-devel                    \
                 libdb-devel gdbm-devel sqlite-devel                           \
-                zlib-devel bzip2-devel xz-devel                               \
+                zlib-devel bzip2-devel                                        \
             " | xargs
         ;;
         opensuse*-* | sles-*)
             echo "
                 automake tk-devel ncurses-devel readline-devel                \
                 libdb-4_8-devel gdbm-devel sqlite3-devel                      \
-                zlib-devel libbz2-devel xz-devel                              \
+                zlib-devel libbz2-devel                                       \
             " | xargs
         ;;
         *)
