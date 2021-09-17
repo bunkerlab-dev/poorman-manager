@@ -25,6 +25,9 @@ while [ $# -gt 0 ]; do
         ffi)
             rm -r "$(pmm info ffi-root)"
         ;;
+        xz-utils)
+            rm -r "$(pmm info xz-utils-root)"
+        ;;
         openssl-1.0.2|openssl-1.1.1)
             rm -r "$(pmm info openssl-root $(echo $1 | cut -d- -f2))"
         ;;
