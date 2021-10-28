@@ -5,7 +5,8 @@ x86 and x86_64. The tool includes:
 * Access to basic OS information.
 * Common interface to use the different package managers across GNU/Linux
   distributions (e.g. install, remove, update, clean).
-* Custom scripts to compile certain libraries from source (e.g. OpenSSL, ffi).
+* Custom scripts to compile certain libraries from source (e.g. FFI, OpenSSL,
+  SQLite).
 * Thin wrapper around PyEnv to install Python versions, including:
   * all the preparation steps before calling `pyenv install` successfully, and
   * some cleanup after Python installation.
@@ -40,10 +41,6 @@ Valid pmm commands are:
 For the Python installations, the following modules may fail:
 * `_tkinter` module if `tk-dev` is not provided (e.g. Debian 4).
 * `_uuid` module for Python 3.7+ if `uuid-dev` is not provided.
-* `_sqlite3` module for Python 3.7+ if `libsqlite3-dev` version is elder than
-  3.3.9 (e.g. Debian 4).
-* `_sqlite3` module for Python 3.8+ if `libsqlite3-dev` version is elder than
-  3.7.2 (e.g. Debian 5).
 
 ## License
 
