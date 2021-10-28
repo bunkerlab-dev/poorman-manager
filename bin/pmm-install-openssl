@@ -30,8 +30,8 @@ if [ -z $(echo "${version}" | grep -E "^${regex}$" || true) ]; then
 fi
 
 # Define remote url and installation prefix.
-remote="https://www.openssl.org/source"
-pkgname="openssl-${version}"
+remote="https://github.com/openssl/openssl/archive/refs/tags"
+pkgname="OpenSSL_$(echo ${version} | tr '.' '_')"
 pkgfile="${pkgname}.tar.gz"
 prefix=$(pmm info openssl-root ${version})
 
@@ -61,7 +61,8 @@ echo "Downloading OpenSSL ${version}..."
 wget -q ${remote}/${pkgfile}
 
 echo "Decompressing OpenSSL ${version}..."
-tar -xf ${pkgfile}
+mkdir -p "${pkgname}"
+tar -xf ${pkgfile} -C "${pkgname}" --strip-components=1
 
 # Find out the architecture without relying on the kernel.
 arch=$(pmm system os-arch)
