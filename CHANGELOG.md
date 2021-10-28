@@ -12,6 +12,8 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 - Remove system `xz-utils` as `pyenv-dev` dependency and instead compile
   `xz-utils` from source when compiling Python 3.3+.
+- Remove system `libsqlite3-dev` as `pyenv-dev` dependency and instead compile
+  SQLite from source.
 
 ### Removed
 - Remove `tk-dev` and `xz-utils` for `pyenv-dev` in Debian-like systems.
