@@ -39,7 +39,6 @@ Valid pmm commands are:
 
 For the Python installations, the following modules may fail:
 * `_tkinter` module if `tk-dev` is not provided (e.g. Debian 4).
-* `_lzma` module for Python 3.3+ if `xz-utils` is not provided (e.g. Debian 4).
 * `_uuid` module for Python 3.7+ if `uuid-dev` is not provided.
 * `_sqlite3` module for Python 3.7+ if `libsqlite3-dev` version is elder than
   3.3.9 (e.g. Debian 4).
