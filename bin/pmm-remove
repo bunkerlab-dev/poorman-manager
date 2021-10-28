@@ -25,6 +25,9 @@ while [ $# -gt 0 ]; do
         ffi)
             rm -r "$(pmm info ffi-root)"
         ;;
+        sqlite)
+            rm -r "$(pmm info sqlite-root)"
+        ;;
         xz-utils)
             rm -r "$(pmm info xz-utils-root)"
         ;;

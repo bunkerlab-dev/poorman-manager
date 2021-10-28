@@ -190,6 +190,11 @@ _info_ffi_root() {
 }
 
 
+_info_sqlite_root() {
+    echo /opt/sqlite
+}
+
+
 _info_xz_utils_root() {
     echo /opt/xz-utils
 }
@@ -362,7 +367,7 @@ case "$1" in
     profile|version)
         _info_$(echo $1 | tr - _)
     ;;
-    pyenv-dev|pyenv-profile|pyenv-root|ffi-root|xz-utils-root)
+    pyenv-dev|pyenv-profile|pyenv-root|ffi-root|sqlite-root|xz-utils-root)
         _info_$(echo $1 | tr - _)
     ;;
     *)
