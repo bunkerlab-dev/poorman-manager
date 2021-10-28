@@ -48,7 +48,7 @@ echo "Creating temporary workspace in ${tmpdir}..."
 
 # Proceed with the installation.
 echo "Downloading xz-utils ${version}..."
-wget -q ${remote}/${pkgfile}
+wget -q --no-check-certificate ${remote}/${pkgfile}
 
 echo "Decompressing xz-utils ${version}..."
 tar -xf ${pkgfile}

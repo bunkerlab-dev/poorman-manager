@@ -48,7 +48,7 @@ echo "Creating temporary workspace in ${tmpdir}..."
 
 # Proceed with the installation.
 echo "Downloading sqlite ${version}..."
-wget -q ${remote}/${pkgfile}
+wget -q --no-check-certificate ${remote}/${pkgfile}
 
 echo "Decompressing sqlite ${version}..."
 tar -xf ${pkgfile}
