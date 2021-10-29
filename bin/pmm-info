@@ -13,7 +13,7 @@ alias pmm="sh ${here}/pmm"
 
 
 _info_version() {
-    echo "0.3.0"
+    echo "0.3.0+dev"
 }
 
 
