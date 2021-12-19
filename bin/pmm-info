@@ -203,7 +203,16 @@ _info_xz_utils_root() {
 _info_gcc_full() {
     os_fullname="$(pmm system os-name)-$(pmm system os-version)"
     case "${os_fullname}" in
-        debian-[456].0* | ubuntu-* | trisquel-*)
+        debian-4.0*)
+            echo "
+                binutils cpio dpkg-dev cpp-4.1 gcc-4.1 g++-4.1                \
+                gfortran-4.1 libc6-dev libdb4.4 libgdbm3 libgfortran1         \
+                libgfortran1-dev libgmp3c2 libmpfr1 libmudflap0 libssp0       \
+                libstdc++6-4.1-dev linux-kernel-headers make perl perl-doc    \
+                perl-modules                                                  \
+            " | xargs
+        ;;
+        debian-[56].0* | ubuntu-* | trisquel-*)
             echo "gcc g++ gfortran"
         ;;
         centos-*)
