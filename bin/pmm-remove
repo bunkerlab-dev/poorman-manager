@@ -99,7 +99,7 @@ while [ $# -gt 0 ]; do
             pkgman=$(pmm system os-package-manager)
             case ${pkgman} in
                 apt-get)
-                    remove="remove --purge"
+                    remove="remove --purge --force-yes"
                     aptversion=$(apt-get --version | head -n1 | cut -d' ' -f2)
                     case "${aptversion}" in
                         0.[0-6].*)
