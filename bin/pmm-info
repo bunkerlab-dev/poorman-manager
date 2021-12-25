@@ -52,6 +52,9 @@ _info_hdf5() {
         debian-6.0*)
             echo "libhdf5-serial-1.8.4 libhdf5-serial-dev"
         ;;
+        debian-8*)
+            echo "libhdf5-8 libhdf5-dev"
+        ;;
         ubuntu-* | trisquel-*)
             echo "libhdf5-103 libhdf5-dev"
         ;;
@@ -78,7 +81,7 @@ _info_blas() {
         debian-[56].0*)
             echo "libblas3gf libblas-dev"
         ;;
-        ubuntu-* | trisquel-*)
+        debian-* | ubuntu-* | trisquel-*)
             echo "libblas3 libblas-dev"
         ;;
         centos-*)
@@ -104,7 +107,7 @@ _info_lapack() {
         debian-[56].0*)
             echo "liblapack3gf liblapack-dev"
         ;;
-        ubuntu-* | trisquel-*)
+        debian-* | ubuntu-* | trisquel-*)
             echo "liblapack3 liblapack-dev"
         ;;
         centos-*)
@@ -130,6 +133,9 @@ _info_netcdf4() {
         debian-6.0*)
             echo "libnetcdf6 libnetcdf-dev"
         ;;
+        debian-8*)
+            echo "libnetcdfc7 libnetcdf-dev"
+        ;;
         ubuntu-* | trisquel-*)
             echo "libnetcdf15 libnetcdf-dev"
         ;;
@@ -150,7 +156,7 @@ _info_netcdf4() {
 _info_matplotlib_dev() {
     os_fullname="$(pmm system os-name)-$(pmm system os-version)"
     case "${os_fullname}" in
-        debian-[456].0*)
+        debian-[456].0* | debian-8*)
             echo "libfreetype6-dev libpng12-dev"
         ;;
         ubuntu-* | trisquel-*)
@@ -212,7 +218,7 @@ _info_gcc_full() {
                 perl-modules                                                  \
             " | xargs
         ;;
-        debian-[56].0* | ubuntu-* | trisquel-*)
+        debian-[56].0* | debian-8* | ubuntu-* | trisquel-*)
             echo "gcc g++ gfortran"
         ;;
         centos-*)
@@ -232,7 +238,7 @@ _info_gcc_full() {
 _info_pkg_config() {
     os_fullname="$(pmm system os-name)-$(pmm system os-version)"
     case "${os_fullname}" in
-        debian-[456].0* | ubuntu-* | trisquel-* | opensuse*-* | sles-*)
+        debian-* | ubuntu-* | trisquel-* | opensuse*-* | sles-*)
             echo "pkg-config"
         ;;
         centos-*)
@@ -249,19 +255,13 @@ _info_pkg_config() {
 _info_libffi() {
     os_fullname="$(pmm system os-name)-$(pmm system os-version)"
     case "${os_fullname}" in
-        debian-4.0*)
+        debian-4.0* | ubuntu-8.04*)
             echo "libffi4"
         ;;
-        debian-[56].0*)
+        debian-[56].0* | ubuntu-8.10* | ubuntu-9.* | ubuntu-10.* | ubuntu-11.04*)
             echo "libffi5"
         ;;
-        ubuntu-8.04*)
-            echo "libffi4"
-        ;;
-        ubuntu-8.10* | ubuntu-9.* | ubuntu-10.* | ubuntu-11.04*)
-            echo "libffi5"
-        ;;
-        ubuntu-11.10* | ubuntu-1[2-9].* | trisquel-*)
+        debian-8* | ubuntu-11.10* | ubuntu-1[2-9].* | trisquel-*)
             echo "libffi6"
         ;;
         ubuntu-2[01].*)
@@ -288,7 +288,7 @@ _info_pyenv_dev() {
                 zlib1g-dev libbz2-dev                                         \
             " | xargs
         ;;
-        debian-[56].0* | ubuntu-* | trisquel-*)
+        debian-* | ubuntu-* | trisquel-*)
             echo "
                 build-essential libncursesw5-dev libreadline-dev              \
                 libdb-dev libgdbm-dev                                         \
