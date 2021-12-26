@@ -106,7 +106,7 @@ while [ $# -gt 0 ]; do
                             autoremove=
                         ;;
                         *)
-                            autoremove="autoremove"
+                            autoremove="autoremove --purge"
                         ;;
                     esac
                 ;;
@@ -152,7 +152,7 @@ while [ $# -gt 0 ]; do
             fi
             pmm update
             ${sudocmd} ${pkgman} ${remove} -y ${pkglist}
-            if [ ! -z ${autoremove} ]; then
+            if [ ! -z "${autoremove}" ]; then
                 ${sudocmd} ${pkgman} ${autoremove} -y
             fi
         ;;

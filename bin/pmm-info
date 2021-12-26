@@ -218,8 +218,11 @@ _info_gcc_full() {
                 perl-modules                                                  \
             " | xargs
         ;;
-        debian-[56].0* | debian-8* | ubuntu-* | trisquel-*)
+        debian-[56].0* | ubuntu-* | trisquel-*)
             echo "gcc g++ gfortran"
+        ;;
+        debian-8*)
+            echo "binutils cpp-4.9 gcc-4.9 g++-4.9 gfortran-4.9"
         ;;
         centos-*)
             echo "gcc gcc-c++ gcc-gfortran"
@@ -286,6 +289,14 @@ _info_pyenv_dev() {
                 build-essential libncursesw5-dev libreadline5-dev             \
                 libdb4.4-dev libgdbm-dev                                      \
                 zlib1g-dev libbz2-dev                                         \
+            " | xargs
+        ;;
+        debian-8*)
+            echo "build-essential bzip2 dpkg-dev                              \
+                  libncursesw5-dev libreadline-dev                            \
+                  libdb-dev libgdbm3 libgdbm-dev                              \
+                  make ncurses-bin perl perl-modules                          \
+                  xz-utils zlib1g-dev libbz2-dev liblzma-dev                  \
             " | xargs
         ;;
         debian-* | ubuntu-* | trisquel-*)
