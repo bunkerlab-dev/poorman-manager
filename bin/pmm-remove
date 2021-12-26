@@ -96,9 +96,11 @@ while [ $# -gt 0 ]; do
                     pkglist="$1"
                 ;;
             esac
+            answer="yes"
             pkgman=$(pmm system os-package-manager)
             case ${pkgman} in
                 apt-get)
+                    answer="Yes, do as I say!"
                     remove="remove --purge --force-yes"
                     aptversion=$(apt-get --version | head -n1 | cut -d' ' -f2)
                     case "${aptversion}" in
@@ -151,9 +153,9 @@ while [ $# -gt 0 ]; do
                 repo_remove=1
             fi
             pmm update
-            ${sudocmd} ${pkgman} ${remove} -y ${pkglist}
+            echo "${answer}" | ${sudocmd} ${pkgman} ${remove} -y ${pkglist}
             if [ ! -z "${autoremove}" ]; then
-                ${sudocmd} ${pkgman} ${autoremove} -y
+                echo "${answer}" | ${sudocmd} ${pkgman} ${autoremove} -y
             fi
         ;;
     esac

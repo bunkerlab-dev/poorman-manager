@@ -286,24 +286,23 @@ _info_pyenv_dev() {
     case "${os_fullname}" in
         debian-4.0*)
             echo "
-                build-essential libncursesw5-dev libreadline5-dev             \
+                build-essential zlib1g-dev libbz2-dev                         \
+                libncursesw5 libncursesw5-dev libreadline5-dev                \
                 libdb4.4-dev libgdbm-dev                                      \
-                zlib1g-dev libbz2-dev                                         \
             " | xargs
         ;;
         debian-8*)
-            echo "build-essential bzip2 dpkg-dev                              \
+            echo "build-essential bzip2 zlib1g-dev libbz2-dev                 \
+                  dpkg-dev make ncurses-bin perl perl-modules                 \
                   libncursesw5-dev libreadline-dev                            \
                   libdb-dev libgdbm3 libgdbm-dev                              \
-                  make ncurses-bin perl perl-modules                          \
-                  xz-utils zlib1g-dev libbz2-dev liblzma-dev                  \
             " | xargs
         ;;
         debian-* | ubuntu-* | trisquel-*)
             echo "
-                build-essential libncursesw5-dev libreadline-dev              \
+                build-essential ncurses-bin zlib1g-dev libbz2-dev             \
+                libncursesw5-dev libreadline-dev                              \
                 libdb-dev libgdbm-dev                                         \
-                zlib1g-dev libbz2-dev liblzma-dev                             \
             " | xargs
         ;;
         centos-*)
