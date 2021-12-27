@@ -291,11 +291,20 @@ _info_pyenv_dev() {
                 libdb4.4-dev libgdbm-dev                                      \
             " | xargs
         ;;
+        debian-5.0*)
+            echo "
+                build-essential bzip2 zlib1g-dev libbz2-dev                   \
+                dpkg-dev make ncurses-bin perl perl-modules                   \
+                libncursesw5-dev libreadline-dev                              \
+                libdb4.6 libdb4.6-dev libgdbm3 libgdbm-dev                    \
+            " | xargs
+        ;;
         debian-8*)
-            echo "build-essential bzip2 zlib1g-dev libbz2-dev                 \
-                  dpkg-dev make ncurses-bin perl perl-modules                 \
-                  libncursesw5-dev libreadline-dev                            \
-                  libdb-dev libgdbm3 libgdbm-dev                              \
+            echo "
+                build-essential bzip2 zlib1g-dev libbz2-dev xz-utils          \
+                dpkg-dev make ncurses-bin perl perl-modules                   \
+                libncursesw5-dev libreadline-dev                              \
+                libdb-dev libgdbm3 libgdbm-dev                                \
             " | xargs
         ;;
         debian-* | ubuntu-* | trisquel-*)
