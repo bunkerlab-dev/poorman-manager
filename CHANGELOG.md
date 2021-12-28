@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file. The format
 is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and the
 project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.4.0] - 2021-12-28
+
+### Added
+- Package translations for Debian 7.
+
+### Fixed
+- Improve aliases `gcc-full` and `pyenv-dev` for Debian 4 and Debian 8.
+- Improve cleanup of packages after installations with `pmm-install`.
 
 ## [0.3.0] - 2021-10-29
 
@@ -69,7 +76,9 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
 [Unreleased]:
-https://github.com/molinav/poorman-manager/compare/v0.3.0...master
+https://github.com/molinav/poorman-manager/compare/v0.4.0...master
+[0.4.0]:
+https://github.com/molinav/poorman-manager/compare/v0.3.0...v0.4.0
 [0.3.0]:
 https://github.com/molinav/poorman-manager/compare/v0.2.0...v0.3.0
 [0.2.0]:
