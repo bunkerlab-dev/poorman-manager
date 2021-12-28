@@ -52,6 +52,9 @@ _info_hdf5() {
         debian-6.0*)
             echo "libhdf5-serial-1.8.4 libhdf5-serial-dev"
         ;;
+        debian-7*)
+            echo "libhdf5-7 libhdf5-dev"
+        ;;
         debian-8*)
             echo "libhdf5-8 libhdf5-dev"
         ;;
@@ -133,7 +136,7 @@ _info_netcdf4() {
         debian-6.0*)
             echo "libnetcdf6 libnetcdf-dev"
         ;;
-        debian-8*)
+        debian-[78]*)
             echo "libnetcdfc7 libnetcdf-dev"
         ;;
         ubuntu-* | trisquel-*)
@@ -156,7 +159,7 @@ _info_netcdf4() {
 _info_matplotlib_dev() {
     os_fullname="$(pmm system os-name)-$(pmm system os-version)"
     case "${os_fullname}" in
-        debian-[456].0* | debian-8*)
+        debian-[456].0* | debian-[78]*)
             echo "libfreetype6-dev libpng12-dev"
         ;;
         ubuntu-* | trisquel-*)
@@ -218,17 +221,17 @@ _info_gcc_full() {
                 perl-modules                                                  \
             " | xargs
         ;;
-        debian-[56].0* | ubuntu-* | trisquel-*)
-            echo "gcc g++ gfortran"
+        debian-[56].0* | debian-7* | ubuntu-* | trisquel-*)
+            echo "binutils gcc g++ gfortran"
         ;;
         debian-8*)
             echo "binutils cpp-4.9 gcc-4.9 g++-4.9 gfortran-4.9"
         ;;
         centos-*)
-            echo "gcc gcc-c++ gcc-gfortran"
+            echo "binutils gcc gcc-c++ gcc-gfortran"
         ;;
         opensuse*-* | sles-*)
-            echo "gcc gcc-c++ gcc-fortran"
+            echo "binutils gcc gcc-c++ gcc-fortran"
         ;;
         *)
             echo 1>&2 "E: Unknown operating system '${os_fullname}'"
@@ -261,7 +264,7 @@ _info_libffi() {
         debian-4.0* | ubuntu-8.04*)
             echo "libffi4"
         ;;
-        debian-[56].0* | ubuntu-8.10* | ubuntu-9.* | ubuntu-10.* | ubuntu-11.04*)
+        debian-[56].0* | debian-7* | ubuntu-8.10* | ubuntu-9.* | ubuntu-10.* | ubuntu-11.04*)
             echo "libffi5"
         ;;
         debian-8* | ubuntu-11.10* | ubuntu-1[2-9].* | trisquel-*)
@@ -299,7 +302,7 @@ _info_pyenv_dev() {
                 libdb4.6 libdb4.6-dev libgdbm3 libgdbm-dev                    \
             " | xargs
         ;;
-        debian-8*)
+        debian-[78]*)
             echo "
                 build-essential bzip2 zlib1g-dev libbz2-dev xz-utils          \
                 dpkg-dev make ncurses-bin perl perl-modules                   \
