@@ -70,7 +70,10 @@ esac
 pip_flags=
 pip_major="$(pip -V | cut -d' ' -f2 | cut -d'.' -f1)"
 if [ ${pip_major} -ge 6 ]; then
-    pip_flags="--no-cache-dir"
+    pip_flags="${pip_flags} --no-cache-dir"
+fi
+if [ ${pip_major} -ge 19 ]; then
+    pip_flags="${pip_flags} --prefer-binary"
 fi
 pip install ${pip_flags} "numpy < ${maxversion}"
 rm -rf ${HOME}/.cache/pip /tmp/pip-*
