@@ -59,12 +59,12 @@ case ${version} in
         version_openssl=1.0.2
         export GET_PIP_URL=
     ;;
-    3.[5-9]|\
+    3.[5-9]|3.10|\
     3.5.[3-9]|3.5.10|\
     3.6.[0-9]|3.6.1[0-5]|\
     3.7.[0-9]|3.7.1[0-2]|\
     3.8.[0-9]|3.8.1[0-2]|\
-    3.9.[0-7])
+    3.9.[0-7]|3.10.[0-1])
         export GET_PIP_URL=
     ;;
     *)
@@ -111,7 +111,7 @@ fi
 
 # Infer complete Python version if the user only gave major + minor.
 case ${version} in
-    2.[67]|3.[1-9])
+    2.[67]|3.[1-9]|3.10)
         regex=$(echo "^\ \ ${version}.[0-9]\+$" | sed 's|\.|\\\.|g')
         version=$(pyenv install -l | grep "${regex}" | tail -n1 | xargs)
     ;;
@@ -144,7 +144,7 @@ fi
 # Install `xz` manually for Python 3.3 or greater.
 delete_xz=0
 case ${version} in
-    3.[3-9].*)
+    3.[3-9].*|3.10.*)
         if [ ! -d $(pmm info xz-utils-root) ]; then
             delete_xz=1
             pmm install xz-utils
@@ -158,7 +158,7 @@ esac
 # Install `libffi` manually for Python 3.6 or greater.
 delete_ffi=0
 case ${version} in
-    3.[6-9].*)
+    3.[6-9].*|3.10.*)
         if [ ! -d $(pmm info ffi-root) ]; then
             delete_ffi=1
             pmm install ffi
@@ -324,7 +324,7 @@ case ${version} in
         } >> "${patchfile}"
     ;;
     # Patch file for `_decimal` and old GNU GCC.
-    3.[3-9].*)
+    3.[3-9].*|3.10.*)
         {
             echo 'diff -r ../orig/Modules/_decimal/libmpdec/constants.c ./Modules/_decimal/libmpdec/constants.c'
             echo '--- ../orig/Modules/_decimal/libmpdec/constants.c  Mon 23 Aug 2021 20:33:10 CEST'
