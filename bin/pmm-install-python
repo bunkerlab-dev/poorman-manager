@@ -136,12 +136,12 @@ delete_sqlite=0
 if [ ! -d $(pmm info sqlite-root) ]; then
     delete_sqlite=1
     pmm install sqlite
-    export CFLAGS="${CFLAGS} -I$(pmm info sqlite-root)/include"
-    export CPPFLAGS="${CPPFLAGS} -I$(pmm info sqlite-root)/include"
-    export LDFLAGS="${LDFLAGS} -L$(pmm info sqlite-root)/lib"
-    if [ "$(pmm system os-arch)" = "amd64" ]; then
-        export LDFLAGS="${LDFLAGS} -L$(pmm info sqlite-root)/lib64"
-    fi
+fi
+export CFLAGS="${CFLAGS} -I$(pmm info sqlite-root)/include"
+export CPPFLAGS="${CPPFLAGS} -I$(pmm info sqlite-root)/include"
+export LDFLAGS="${LDFLAGS} -L$(pmm info sqlite-root)/lib"
+if [ "$(pmm system os-arch)" = "amd64" ]; then
+    export LDFLAGS="${LDFLAGS} -L$(pmm info sqlite-root)/lib64"
 fi
 
 # Install `xz` manually for Python 3.3 or greater.
