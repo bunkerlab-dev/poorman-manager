@@ -34,6 +34,9 @@ while [ $# -gt 0 ]; do
         openssl-1.0.2|openssl-1.1.1)
             rm -r "$(pmm info openssl-root $(echo $1 | cut -d- -f2))"
         ;;
+        perl-*)
+            rm -r "$(pmm info perl-root $(echo $1 | cut -d- -f2))"
+        ;;
         pyenv)
             rm -r "$(pmm info pyenv-root)"
         ;;
