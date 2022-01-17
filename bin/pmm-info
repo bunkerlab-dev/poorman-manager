@@ -199,6 +199,20 @@ _info_ffi_root() {
 }
 
 
+_info_perl_root() {
+    version=5.34.0
+    if [ ! -z "$1" ]; then
+        version="$1"
+    fi
+    regex="5\.([12][0-9]\.[0-9]*|3[0-4]\.[0-9]*)"
+    if [ -z $(echo "${version}" | grep -E "^${regex}$" || true) ]; then
+        echo 1>&2 "E: Invalid perl version '$1'"
+        exit 1
+    fi
+    echo /opt/perl-${version}
+}
+
+
 _info_sqlite_root() {
     echo /opt/sqlite
 }
@@ -391,9 +405,10 @@ case "$1" in
     gcc-full|pkg-config|libffi)
         _info_$(echo $1 | tr - _)
     ;;
-    openssl-root)
+    openssl-root|perl-root)
+        _func=_info_$(echo $1 | tr - _)
         shift
-        _info_openssl_root $@
+        ${_func} $@
     ;;
     profile|version)
         _info_$(echo $1 | tr - _)

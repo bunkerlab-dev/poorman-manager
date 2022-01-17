@@ -36,6 +36,9 @@ while [ $# -gt 0 ]; do
         openssl-1.1.1)
             sh ${here}/pmm-install-openssl 1.1.1k
         ;;
+        perl-*)
+            sh ${here}/pmm-install-perl "$(echo $1 | cut -d'-' -f2-)"
+        ;;
         ffi|pyenv|sqlite|xz-utils)
             sh ${here}/pmm-install-$1
         ;;
