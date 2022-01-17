@@ -139,6 +139,9 @@ if [ ! -d $(pmm info sqlite-root) ]; then
     export CFLAGS="${CFLAGS} -I$(pmm info sqlite-root)/include"
     export CPPFLAGS="${CPPFLAGS} -I$(pmm info sqlite-root)/include"
     export LDFLAGS="${LDFLAGS} -L$(pmm info sqlite-root)/lib"
+    if [ "$(pmm system os-arch)" = "amd64" ]; then
+        export LDFLAGS="${LDFLAGS} -L$(pmm info sqlite-root)/lib64"
+    fi
 fi
 
 # Install `xz` manually for Python 3.3 or greater.
@@ -152,6 +155,9 @@ case ${version} in
         export CFLAGS="${CFLAGS} -I$(pmm info xz-utils-root)/include"
         export CPPFLAGS="${CPPFLAGS} -I$(pmm info xz-utils-root)/include"
         export LDFLAGS="${LDFLAGS} -L$(pmm info xz-utils-root)/lib"
+        if [ "$(pmm system os-arch)" = "amd64" ]; then
+            export LDFLAGS="${LDFLAGS} -L$(pmm info xz-utils-root)/lib64"
+        fi
     ;;
 esac
 
