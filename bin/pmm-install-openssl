@@ -50,6 +50,7 @@ if [ ! -x "$(command -v make || true)" ]; then
 fi
 
 # Install a newer `perl` if needed.
+extraflags=
 delete_perl=0
 perl_version="$(pmm system perl-version)"
 perl_version_major="$(echo ${perl_version} | cut -d'.' -f1)"
@@ -61,6 +62,7 @@ if [ -z $(echo "${version}" | grep -E "^1\.0\.2[a-u]?$" || true) ]; then
             pmm install perl-5.34.0
         fi
         alias perl="$(pmm info perl-root)/bin/perl"
+        extraflags="-D_XOPEN_SOURCE=700"
     fi
 fi
 
@@ -95,11 +97,11 @@ if [ ! -z "${archopts}" ]; then
     perl ./Configure                                                          \
         ${archopts}                                                           \
         --prefix=${prefix} --openssldir=${prefix}/ssl                         \
-        -fPIC no-shared -Wa,--noexecstack -D_XOPEN_SOURCE=700 1>${tmplog} 2>&1
+        -fPIC no-shared -Wa,--noexecstack ${extraflags} 1>${tmplog} 2>&1
 else
     perl ./config                                                             \
         --prefix=${prefix} --openssldir=${prefix}/ssl                         \
-        -fPIC no-shared -Wa,--noexecstack -D_XOPEN_SOURCE=700 1>${tmplog} 2>&1
+        -fPIC no-shared -Wa,--noexecstack ${extraflags} 1>${tmplog} 2>&1
 fi
 
 echo "Building OpenSSL ${version}..."
