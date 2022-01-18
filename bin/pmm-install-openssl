@@ -92,12 +92,12 @@ fi
 echo "Configuring OpenSSL ${version} (arch: ${arch})..."
 cd ${pkgname}
 if [ ! -z "${archopts}" ]; then
-    ./Configure                                                               \
+    perl ./Configure                                                          \
         ${archopts}                                                           \
         --prefix=${prefix} --openssldir=${prefix}/ssl                         \
         -fPIC no-shared -Wa,--noexecstack 1>${tmplog} 2>&1
 else
-    ./config                                                                  \
+    perl ./config                                                             \
         --prefix=${prefix} --openssldir=${prefix}/ssl                         \
         -fPIC no-shared -Wa,--noexecstack 1>${tmplog} 2>&1
 fi
