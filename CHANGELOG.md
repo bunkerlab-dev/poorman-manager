@@ -4,10 +4,29 @@ All notable changes to this project will be documented in this file. The format
 is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and the
 project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.6.0] - 2022-01-18
 
 ### Added
 - Support to build custom versions of `perl`.
+
+### Changed
+- Force Python to be built with newer OpenSSL if possible, even if a newer
+  `perl` needs to be built on-the-fly.
+- Update `wheel` upper limit for latest Python versions.
+
+### Fixed
+- Fix `LDFLAGS` when linking custom SQLite and xz-utils during Python
+  installation on openSUSE and `amd64`.
+- Fix configure call for OpenSSL 1.1.1 series in very ancient Debian images.
+- Prevent `pyenv init --path` being called more than once in PyEnv profile.
+
+## [0.5.0] - 2022-01-03
+
+### Added
+- Initial support for Python 3.10.
+
+## Changed
+- Add `--prefer-binary` option to `pip install` if possible.
 
 ## [0.4.0] - 2021-12-28
 
@@ -81,7 +100,11 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
 [Unreleased]:
-https://github.com/molinav/poorman-manager/compare/v0.4.0...master
+https://github.com/molinav/poorman-manager/compare/v0.6.0...master
+[0.6.0]:
+https://github.com/molinav/poorman-manager/compare/v0.5.0...v0.6.0
+[0.5.0]:
+https://github.com/molinav/poorman-manager/compare/v0.4.0...v0.5.0
 [0.4.0]:
 https://github.com/molinav/poorman-manager/compare/v0.3.0...v0.4.0
 [0.3.0]:
