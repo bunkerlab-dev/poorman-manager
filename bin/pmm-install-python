@@ -116,19 +116,9 @@ if [ ! -z "${unicode}" ]; then
 fi
 
 # Install OpenSSL if not present.
-delete_perl=0
 delete_openssl=0
 package_openssl=openssl-${version_openssl}
 if [ ! -d $(pmm info openssl-root ${version_openssl}) ]; then
-    # Install a newer Perl to build OpenSSL if needed.
-    perl_version="$(pmm system perl-version)"
-    perl_version_major="$(echo ${perl_version} | cut -d'.' -f1)"
-    perl_version_minor="$(echo ${perl_version} | cut -d'.' -f2)"
-    if [ ${perl_version_major} -lt 5 -o ${perl_version_minor} -lt 10 ]; then
-        delete_perl=1
-        pmm install perl-5.34.0
-        alias perl="$(pmm info perl-root)/bin/perl"
-    fi
     delete_openssl=1
     pmm install ${package_openssl}
 fi
@@ -409,12 +399,6 @@ fi
 pmm disable ${package_openssl}
 if [ ${delete_openssl} -eq 1 ]; then
     pmm remove ${package_openssl}
-fi
-
-# Remove Perl if installed on the fly.
-if [ ${delete_perl} -eq 1 ]; then
-    unalias perl
-    pmm remove perl-5.34.0
 fi
 
 # Enable the Python installation.

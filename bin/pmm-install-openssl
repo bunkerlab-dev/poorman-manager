@@ -49,6 +49,19 @@ if [ ! -x "$(command -v make || true)" ]; then
     pmm install make 1>/dev/null 2>&1
 fi
 
+# Install a newer `perl` if needed.
+delete_perl=0
+perl_version="$(pmm system perl-version)"
+perl_version_major="$(echo ${perl_version} | cut -d'.' -f1)"
+perl_version_minor="$(echo ${perl_version} | cut -d'.' -f2)"
+if [ -z $(echo "${version}" | grep -E "^1\.0\.2[a-u]?$" || true) ]; then
+    if [ ${perl_version_major} -lt 5 -o ${perl_version_minor} -lt 10 ]; then
+        delete_perl=1
+        pmm install perl-5.34.0
+        alias perl="$(pmm info perl-root)/bin/perl"
+    fi
+fi
+
 # Create temporary workspace.
 cwd="$(pwd)"
 tmpdir="$(mktemp -d)"
@@ -105,6 +118,12 @@ fi
 echo "Cleaning up..."
 rm -rf ${tmpdir}
 cd ${cwd}
+
+# Remove `perl` if installed on the fly.
+if [ ${delete_perl} -eq 1 ]; then
+    unalias perl
+    pmm remove perl-5.34.0
+fi
 
 # Remove `make` if installed on the fly.
 if [ ${delete_make} -eq 1 ]; then
