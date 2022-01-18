@@ -58,7 +58,7 @@ echo "Creating temporary workspace in ${tmpdir}..."
 
 # Proceed with the installation.
 echo "Downloading perl ${version}..."
-wget -q ${remote}/${pkgfile}
+wget -q --no-check-certificate ${remote}/${pkgfile}
 
 echo "Decompressing perl ${version}..."
 mkdir -p "${pkgname}"
