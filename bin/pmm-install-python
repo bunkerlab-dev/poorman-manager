@@ -341,6 +341,38 @@ case ${version} in
             echo ' #elif defined(CONFIG_32)'
             echo '    ;;'
         } >> "${patchfile}"
+        case ${version} in
+            3.11.*)
+            {
+                echo 'diff -r ../orig/configure ./configure'
+                echo '--- ../orig/configure  2022-10-24 17:35:39'
+                echo '+++ ./configure        2022-10-24 17:35:39'
+                echo '@@ -8066,7 +8066,8 @@'
+                echo ' # tweak BASECFLAGS based on compiler and platform'
+                echo ' case $GCC in'
+                echo ' yes)'
+                echo '-    CFLAGS_NODIST="$CFLAGS_NODIST -std=c11"'
+                echo '+    CFLAGS_NODIST="$CFLAGS_NODIST -std=c99"'
+                echo '+    BASECFLAGS="$BASECFLAGS -D'"'"'_Static_assert(...)='"'"'"'
+                echo ' '
+                echo ' '
+                echo ' '
+                echo '@@ -24977,12 +24978,8 @@'
+                echo '         if test "$py_cv_module__sqlite3" != "n/a"; then :'
+                echo ' '
+                echo '     if test "$have_sqlite3" = "yes"; then :'
+                echo '-  if test "$have_supported_sqlite3" = "yes"; then :'
+                echo '   py_cv_module__sqlite3=yes'
+                echo ' else'
+                echo '-  py_cv_module__sqlite3=missing'
+                echo '-fi'
+                echo '-else'
+                echo '   py_cv_module__sqlite3=disabled'
+                echo ' fi'
+                echo ' '
+            } >> "${patchfile}"
+        ;;
+        esac
     ;;
 esac
 if [ -d "${patchfold}" ]; then
