@@ -200,131 +200,155 @@ patchfile="${tmpdir}/python-${version}.patch"
 patchfold="${defdir}/patches/${version}/Python-$(echo ${version} | sed 's|\(.*\)\.0$|\1|')"
 touch "${patchfile}"
 case ${version} in
-    # Patch build bug in `ossaudiodev`.
-    3.2.[01])
-        {
-            echo "--- setup.py.orig  2010-12-28 10:51:43.000000000 +0100"
-            echo "+++ setup.py       2021-09-07 09:49:48.448565000 +0200"
-            echo "@@ -1352,8 +1352,7 @@"
-            echo "         # End multiprocessing"
-            echo " "
-            echo "         # Platform-specific libraries"
-            echo "-        if (platform in ('linux2', 'freebsd4', 'freebsd5', 'freebsd6',"
-            echo "-                        'freebsd7', 'freebsd8')"
-            echo "+        if (platform.startswith('linux') or platform.startswith('freebsd')"
-            echo '             or platform.startswith("gnukfreebsd")):'
-            echo "             exts.append( Extension('ossaudiodev', ['ossaudiodev.c']) )"
-            echo "         else:"
-        } >> ${patchfile}
-    ;;
-    # Patch encoding error in `distutils`.
-    3.2.2)
-        {
-            echo '--- ../orig/Lib/distutils/dist.py  2011-09-03 18:16:40.000000000 +0200'
-            echo '+++ ./Lib/distutils/dist.py        2012-04-11 08:54:02.000000000 +0200'
-            echo '@@ -1010,11 +1010,9 @@'
-            echo '     def write_pkg_info(self, base_dir):'
-            echo '         """Write the PKG-INFO file into the release tree.'
-            echo '         """'
-            echo "-        pkg_info = open(os.path.join(base_dir, 'PKG-INFO'), 'w')"
-            echo '-        try:'
-            echo "+        with open(os.path.join(base_dir, 'PKG-INFO'), 'w',"
-            echo "+                  encoding='UTF-8') as pkg_info:"
-            echo '             self.write_pkg_file(pkg_info)'
-            echo '-        finally:'
-            echo '-            pkg_info.close()'
-            echo ' '
-            echo '     def write_pkg_file(self, file):'
-            echo '         """Write the PKG-INFO format data to a file object.'
-        } >> ${patchfile}
-    ;;
-    3.2.3)
-        {
-            echo '--- ../orig/Modules/_posixsubprocess.c'
-            echo '+++ ./Modules/_posixsubprocess.c'
-            echo '@@ -202,7 +207,18 @@'
-            echo '     int fd_dir_fd;'
-            echo '     if (start_fd >= end_fd)'
-            echo '         return;'
-            echo '-        fd_dir_fd = open(FD_DIR, O_RDONLY | O_CLOEXEC, 0);'
-            echo '+#ifdef O_CLOEXEC'
-            echo '+    fd_dir_fd = open(FD_DIR, O_RDONLY | O_CLOEXEC, 0);'
-            echo '+#else'
-            echo '+    fd_dir_fd = open(FD_DIR, O_RDONLY, 0);'
-            echo '+#ifdef FD_CLOEXEC'
-            echo '+    {'
-            echo '+        int old = fcntl(fd_dir_fd, F_GETFD);'
-            echo '+        if (old != -1)'
-            echo '+            fcntl(fd_dir_fd, F_SETFD, old | FD_CLOEXEC);'
-            echo '+    }'
-            echo '+#endif'
-            echo '+#endif'
-            echo '     if (fd_dir_fd == -1) {'
-            echo '         /* No way to get a list of open fds. */'
-            echo '         _close_fds_by_brute_force(start_fd, end_fd, py_fds_to_keep);'
-        } >> ${patchfile}
-    ;;
-    # Patch build bug in `_sqlite` if using SQLite < 3.5.
-    3.2.4)
-        {
-            echo '--- ../orig/Modules/_sqlite/cursor.c  2013-04-06 09:38:43.000000000 +0200'
-            echo '+++ ./Modules/_sqlite/cursor.c        2013-05-15 18:33:53.000000000 +0200'
-            echo '@@ -716,7 +716,7 @@'
-            echo ' '
-            echo '         Py_DECREF(self->lastrowid);'
-            echo '         if (!multiple && statement_type == STATEMENT_INSERT) {'
-            echo '-            sqlite3_int64 lastrowid;'
-            echo '+            sqlite_int64 lastrowid;'
-            echo '             Py_BEGIN_ALLOW_THREADS'
-            echo '             lastrowid = sqlite3_last_insert_rowid(self->connection->db);'
-            echo '             Py_END_ALLOW_THREADS'
-            echo '--- ../orig/Modules/_sqlite/util.c  2013-04-06 09:38:43.000000000 +0200'
-            echo '+++ ./Modules/_sqlite/util.c        2013-05-15 18:33:53.000000000 +0200'
-            echo '@@ -111,7 +111,7 @@'
-            echo ' #endif'
-            echo ' '
-            echo ' PyObject *'
-            echo '-_pysqlite_long_from_int64(sqlite3_int64 value)'
-            echo '+_pysqlite_long_from_int64(sqlite_int64 value)'
-            echo ' {'
-            echo ' #ifdef HAVE_LONG_LONG'
-            echo ' # if SIZEOF_LONG_LONG < 8'
-            echo '@@ -135,7 +135,7 @@'
-            echo '     return PyLong_FromLong(value);'
-            echo ' }'
-            echo ' '
-            echo '-sqlite3_int64'
-            echo '+sqlite_int64'
-            echo ' _pysqlite_long_as_int64(PyObject * py_val)'
-            echo ' {'
-            echo '     int overflow;'
-            echo '@@ -158,8 +158,8 @@'
-            echo ' #endif'
-            echo '             return value;'
-            echo '     }'
-            echo '-    else if (sizeof(value) < sizeof(sqlite3_int64)) {'
-            echo '-        sqlite3_int64 int64val;'
-            echo '+    else if (sizeof(value) < sizeof(sqlite_int64)) {'
-            echo '+        sqlite_int64 int64val;'
-            echo '         if (_PyLong_AsByteArray((PyLongObject *)py_val,'
-            echo '                                 (unsigned char *)&int64val, sizeof(int64val),'
-            echo '                                 IS_LITTLE_ENDIAN, 1 /* signed */) >= 0) {'
-            echo '--- ../orig/Modules/_sqlite/util.h  2013-04-06 09:38:43.000000000 +0200'
-            echo '+++ ./Modules/_sqlite/util.h        2013-05-15 18:33:53.000000000 +0200'
-            echo '@@ -36,7 +36,7 @@'
-            echo '  */'
-            echo ' int _pysqlite_seterror(sqlite3* db, sqlite3_stmt* st);'
-            echo ' '
-            echo '-PyObject * _pysqlite_long_from_int64(sqlite3_int64 value);'
-            echo '-sqlite3_int64 _pysqlite_long_as_int64(PyObject * value);'
-            echo '+PyObject * _pysqlite_long_from_int64(sqlite_int64 value);'
-            echo '+sqlite_int64 _pysqlite_long_as_int64(PyObject * value);'
-            echo ' '
-            echo ' #endif'
-        } >> "${patchfile}"
-    ;;
-    # Patch file for `_decimal` and old GNU GCC.
+    3.[1-2].*)
+        # Patch segfault when building with GCC 10+ on amd64.
+        if [ "$(pmm system os-arch)" = "amd64" ]; then
+            {
+                echo 'diff -r ../orig/Objects/obmalloc.c ./Objects/obmalloc.c'
+                echo "--- ../orig/Objects/obmalloc.c  2012-04-09 23:25:37"
+                echo "+++ ./Objects/obmalloc.c        2012-04-09 23:25:37"
+                echo "@@ -127,9 +127,9 @@"
+                echo "  *"
+                echo "  * You shouldn't change this unless you know what you are doing."
+                echo "  */"
+                echo "-#define ALIGNMENT               8               /* must be 2^N */"
+                echo "-#define ALIGNMENT_SHIFT         3"
+                echo "+#define ALIGNMENT               16               /* must be 2^N */"
+                echo "+#define ALIGNMENT_SHIFT         4"
+                echo " #define ALIGNMENT_MASK          (ALIGNMENT - 1)"
+                echo " "
+                echo " /* Return the number of bytes in size class I, as a uint. */"
+                echo " #define INDEX2SIZE(I) (((uint)(I) + 1) << ALIGNMENT_SHIFT)"
+            } >> "${patchfile}"
+        fi
+        case ${version} in
+            3.2.[01])
+                # Patch build bug in `ossaudiodev`.
+                {
+                    echo "--- setup.py.orig  2010-12-28 10:51:43.000000000 +0100"
+                    echo "+++ setup.py       2021-09-07 09:49:48.448565000 +0200"
+                    echo "@@ -1352,8 +1352,7 @@"
+                    echo "         # End multiprocessing"
+                    echo " "
+                    echo "         # Platform-specific libraries"
+                    echo "-        if (platform in ('linux2', 'freebsd4', 'freebsd5', 'freebsd6',"
+                    echo "-                        'freebsd7', 'freebsd8')"
+                    echo "+        if (platform.startswith('linux') or platform.startswith('freebsd')"
+                    echo '             or platform.startswith("gnukfreebsd")):'
+                    echo "             exts.append( Extension('ossaudiodev', ['ossaudiodev.c']) )"
+                    echo "         else:"
+                } >> ${patchfile}
+            ;;
+            3.2.2)
+                # Patch encoding error in `distutils`.
+                {
+                    echo '--- ../orig/Lib/distutils/dist.py  2011-09-03 18:16:40.000000000 +0200'
+                    echo '+++ ./Lib/distutils/dist.py        2012-04-11 08:54:02.000000000 +0200'
+                    echo '@@ -1010,11 +1010,9 @@'
+                    echo '     def write_pkg_info(self, base_dir):'
+                    echo '         """Write the PKG-INFO file into the release tree.'
+                    echo '         """'
+                    echo "-        pkg_info = open(os.path.join(base_dir, 'PKG-INFO'), 'w')"
+                    echo '-        try:'
+                    echo "+        with open(os.path.join(base_dir, 'PKG-INFO'), 'w',"
+                    echo "+                  encoding='UTF-8') as pkg_info:"
+                    echo '             self.write_pkg_file(pkg_info)'
+                    echo '-        finally:'
+                    echo '-            pkg_info.close()'
+                    echo ' '
+                    echo '     def write_pkg_file(self, file):'
+                    echo '         """Write the PKG-INFO format data to a file object.'
+                } >> ${patchfile}
+            ;;
+            3.2.3)
+                {
+                    echo '--- ../orig/Modules/_posixsubprocess.c'
+                    echo '+++ ./Modules/_posixsubprocess.c'
+                    echo '@@ -202,7 +207,18 @@'
+                    echo '     int fd_dir_fd;'
+                    echo '     if (start_fd >= end_fd)'
+                    echo '         return;'
+                    echo '-        fd_dir_fd = open(FD_DIR, O_RDONLY | O_CLOEXEC, 0);'
+                    echo '+#ifdef O_CLOEXEC'
+                    echo '+    fd_dir_fd = open(FD_DIR, O_RDONLY | O_CLOEXEC, 0);'
+                    echo '+#else'
+                    echo '+    fd_dir_fd = open(FD_DIR, O_RDONLY, 0);'
+                    echo '+#ifdef FD_CLOEXEC'
+                    echo '+    {'
+                    echo '+        int old = fcntl(fd_dir_fd, F_GETFD);'
+                    echo '+        if (old != -1)'
+                    echo '+            fcntl(fd_dir_fd, F_SETFD, old | FD_CLOEXEC);'
+                    echo '+    }'
+                    echo '+#endif'
+                    echo '+#endif'
+                    echo '     if (fd_dir_fd == -1) {'
+                    echo '         /* No way to get a list of open fds. */'
+                    echo '         _close_fds_by_brute_force(start_fd, end_fd, py_fds_to_keep);'
+                } >> ${patchfile}
+            ;;
+            3.2.4)
+                # Patch build bug in `_sqlite` if using SQLite < 3.5.
+                {
+                    echo '--- ../orig/Modules/_sqlite/cursor.c  2013-04-06 09:38:43.000000000 +0200'
+                    echo '+++ ./Modules/_sqlite/cursor.c        2013-05-15 18:33:53.000000000 +0200'
+                    echo '@@ -716,7 +716,7 @@'
+                    echo ' '
+                    echo '         Py_DECREF(self->lastrowid);'
+                    echo '         if (!multiple && statement_type == STATEMENT_INSERT) {'
+                    echo '-            sqlite3_int64 lastrowid;'
+                    echo '+            sqlite_int64 lastrowid;'
+                    echo '             Py_BEGIN_ALLOW_THREADS'
+                    echo '             lastrowid = sqlite3_last_insert_rowid(self->connection->db);'
+                    echo '             Py_END_ALLOW_THREADS'
+                    echo '--- ../orig/Modules/_sqlite/util.c  2013-04-06 09:38:43.000000000 +0200'
+                    echo '+++ ./Modules/_sqlite/util.c        2013-05-15 18:33:53.000000000 +0200'
+                    echo '@@ -111,7 +111,7 @@'
+                    echo ' #endif'
+                    echo ' '
+                    echo ' PyObject *'
+                    echo '-_pysqlite_long_from_int64(sqlite3_int64 value)'
+                    echo '+_pysqlite_long_from_int64(sqlite_int64 value)'
+                    echo ' {'
+                    echo ' #ifdef HAVE_LONG_LONG'
+                    echo ' # if SIZEOF_LONG_LONG < 8'
+                    echo '@@ -135,7 +135,7 @@'
+                    echo '     return PyLong_FromLong(value);'
+                    echo ' }'
+                    echo ' '
+                    echo '-sqlite3_int64'
+                    echo '+sqlite_int64'
+                    echo ' _pysqlite_long_as_int64(PyObject * py_val)'
+                    echo ' {'
+                    echo '     int overflow;'
+                    echo '@@ -158,8 +158,8 @@'
+                    echo ' #endif'
+                    echo '             return value;'
+                    echo '     }'
+                    echo '-    else if (sizeof(value) < sizeof(sqlite3_int64)) {'
+                    echo '-        sqlite3_int64 int64val;'
+                    echo '+    else if (sizeof(value) < sizeof(sqlite_int64)) {'
+                    echo '+        sqlite_int64 int64val;'
+                    echo '         if (_PyLong_AsByteArray((PyLongObject *)py_val,'
+                    echo '                                 (unsigned char *)&int64val, sizeof(int64val),'
+                    echo '                                 IS_LITTLE_ENDIAN, 1 /* signed */) >= 0) {'
+                    echo '--- ../orig/Modules/_sqlite/util.h  2013-04-06 09:38:43.000000000 +0200'
+                    echo '+++ ./Modules/_sqlite/util.h        2013-05-15 18:33:53.000000000 +0200'
+                    echo '@@ -36,7 +36,7 @@'
+                    echo '  */'
+                    echo ' int _pysqlite_seterror(sqlite3* db, sqlite3_stmt* st);'
+                    echo ' '
+                    echo '-PyObject * _pysqlite_long_from_int64(sqlite3_int64 value);'
+                    echo '-sqlite3_int64 _pysqlite_long_as_int64(PyObject * value);'
+                    echo '+PyObject * _pysqlite_long_from_int64(sqlite_int64 value);'
+                    echo '+sqlite_int64 _pysqlite_long_as_int64(PyObject * value);'
+                    echo ' '
+                    echo ' #endif'
+                } >> "${patchfile}"
+            ;;
+            esac
+        ;;
     3.[3-9].*|3.1[0-1].*)
+        # Patch file for `_decimal` and old GNU GCC.
         {
             echo 'diff -r ../orig/Modules/_decimal/libmpdec/constants.c ./Modules/_decimal/libmpdec/constants.c'
             echo '--- ../orig/Modules/_decimal/libmpdec/constants.c  Mon 23 Aug 2021 20:33:10 CEST'
@@ -342,36 +366,58 @@ case ${version} in
             echo '    ;;'
         } >> "${patchfile}"
         case ${version} in
+            3.3.*)
+                # Patch segfault when building with GCC 10+ on amd64.
+                if [ "$(pmm system os-arch)" = "amd64" ]; then
+                    {
+                        echo 'diff -r ../orig/Objects/obmalloc.c ./Objects/obmalloc.c'
+                        echo "--- ../orig/Objects/obmalloc.c  2017-09-19 07:32:02"
+                        echo "+++ ./Objects/obmalloc.c        2017-09-19 07:32:02"
+                        echo "@@ -136,8 +136,8 @@"
+                        echo "  *"
+                        echo "  * You shouldn't change this unless you know what you are doing."
+                        echo "  */"
+                        echo "-#define ALIGNMENT               8               /* must be 2^N */"
+                        echo "-#define ALIGNMENT_SHIFT         3"
+                        echo "+#define ALIGNMENT               16               /* must be 2^N */"
+                        echo "+#define ALIGNMENT_SHIFT         4"
+                        echo " "
+                        echo " /* Return the number of bytes in size class I, as a uint. */"
+                        echo " #define INDEX2SIZE(I) (((uint)(I) + 1) << ALIGNMENT_SHIFT)"
+                    } >> "${patchfile}"
+                fi
+            ;;
             3.11.*)
-            {
-                echo 'diff -r ../orig/configure ./configure'
-                echo '--- ../orig/configure  2022-10-24 17:35:39'
-                echo '+++ ./configure        2022-10-24 17:35:39'
-                echo '@@ -8066,7 +8066,8 @@'
-                echo ' # tweak BASECFLAGS based on compiler and platform'
-                echo ' case $GCC in'
-                echo ' yes)'
-                echo '-    CFLAGS_NODIST="$CFLAGS_NODIST -std=c11"'
-                echo '+    CFLAGS_NODIST="$CFLAGS_NODIST -std=c99"'
-                echo '+    BASECFLAGS="$BASECFLAGS -D'"'"'_Static_assert(...)='"'"'"'
-                echo ' '
-                echo ' '
-                echo ' '
-                echo '@@ -24977,12 +24978,8 @@'
-                echo '         if test "$py_cv_module__sqlite3" != "n/a"; then :'
-                echo ' '
-                echo '     if test "$have_sqlite3" = "yes"; then :'
-                echo '-  if test "$have_supported_sqlite3" = "yes"; then :'
-                echo '   py_cv_module__sqlite3=yes'
-                echo ' else'
-                echo '-  py_cv_module__sqlite3=missing'
-                echo '-fi'
-                echo '-else'
-                echo '   py_cv_module__sqlite3=disabled'
-                echo ' fi'
-                echo ' '
-            } >> "${patchfile}"
-        ;;
+                # Reset default C standard to C99.
+                {
+                    echo 'diff -r ../orig/configure ./configure'
+                    echo '--- ../orig/configure  2022-10-24 17:35:39'
+                    echo '+++ ./configure        2022-10-24 17:35:39'
+                    echo '@@ -8066,7 +8066,8 @@'
+                    echo ' # tweak BASECFLAGS based on compiler and platform'
+                    echo ' case $GCC in'
+                    echo ' yes)'
+                    echo '-    CFLAGS_NODIST="$CFLAGS_NODIST -std=c11"'
+                    echo '+    CFLAGS_NODIST="$CFLAGS_NODIST -std=c99"'
+                    echo '+    BASECFLAGS="$BASECFLAGS -D'"'"'_Static_assert(...)='"'"'"'
+                    echo ' '
+                    echo ' '
+                    echo ' '
+                    echo '@@ -24977,12 +24978,8 @@'
+                    echo '         if test "$py_cv_module__sqlite3" != "n/a"; then :'
+                    echo ' '
+                    echo '     if test "$have_sqlite3" = "yes"; then :'
+                    echo '-  if test "$have_supported_sqlite3" = "yes"; then :'
+                    echo '   py_cv_module__sqlite3=yes'
+                    echo ' else'
+                    echo '-  py_cv_module__sqlite3=missing'
+                    echo '-fi'
+                    echo '-else'
+                    echo '   py_cv_module__sqlite3=disabled'
+                    echo ' fi'
+                    echo ' '
+                } >> "${patchfile}"
+            ;;
         esac
     ;;
 esac
