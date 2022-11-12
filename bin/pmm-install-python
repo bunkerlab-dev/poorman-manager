@@ -388,6 +388,9 @@ case ${version} in
                 fi
             ;;
             3.11.*)
+                # Relax tests about having a working OpenSSL library.
+                export PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} ac_cv_working_openssl_hashlib=yes"
+                export PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} ac_cv_working_openssl_ssl=yes"
                 # Reset default C standard to C99.
                 {
                     echo 'diff -r ../orig/configure ./configure'
