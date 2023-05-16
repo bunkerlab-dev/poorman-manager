@@ -13,7 +13,7 @@ alias pmm="sh ${here}/pmm"
 
 
 _system_kernel_version() {
-    if [ -z "$(grep /proc/1/cgroup -Ee 'docker|containerd\.service')" ]; then
+    if [ -z "$(grep /proc/1/cgroup -Ee 'docker|buildkit|containerd\.service')" ]; then
         # We are not inside Docker.
         echo "$(uname -r | cut -d'-' -f1)"
     else
