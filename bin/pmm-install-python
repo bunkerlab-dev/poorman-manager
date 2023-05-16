@@ -435,8 +435,18 @@ export CFLAGS="${CFLAGS} -I/usr/local/ssl/include"
 export LDFLAGS="${LDFLAGS} -L/usr/local/ssl/lib"
 
 # Install the specific Python version.
+set +e
 PATH="/usr/local/ssl/bin/openssl:${PATH}"                  \
     pyenv install --patch "${fullversion}" < "${patchfile}"
+exitcode=$?
+set -e
+
+# Fetch installation logs.
+if [ ${exitcode} -ne 0 ]; then
+    cp ${tmpdir}/python-build.*.log ${fullversion}.log;
+    cat ${fullversion}.log
+    exit ${exitcode}
+fi
 cp ${tmpdir}/python-build.*.log "${pydir}/${fullversion}.log"
 rm -rf ${tmpdir}
 
