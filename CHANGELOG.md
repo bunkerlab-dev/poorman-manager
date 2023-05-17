@@ -21,6 +21,7 @@ https://semver.org/spec/v2.0.0.html
 - Update `numpy` upper limit for latest Python versions.
 - Update `pip` upper limit for latest Python versions.
 - Update `scipy` upper limit for latest Python versions.
+- Update `setuptools` upper limit for latest Python versions.
 
 ### Fixed
 - Fix output of `pmm system kernel-version` when using `buildkit`.
