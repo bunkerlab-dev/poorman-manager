@@ -20,6 +20,7 @@ https://semver.org/spec/v2.0.0.html
   building Python (this default switch was removed in `pyenv` 2.3.10).
 - Update `numpy` upper limit for latest Python versions.
 - Update `pip` upper limit for latest Python versions.
+- Update `scipy` upper limit for latest Python versions.
 
 ### Fixed
 - Fix output of `pmm system kernel-version` when using `buildkit`.
