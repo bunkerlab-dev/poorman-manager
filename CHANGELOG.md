@@ -1,13 +1,28 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. The format
-is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and the
-project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+All notable changes to this project will be documented in this file.
+The format is based on [Keep a Changelog], and the project adheres to
+[Semantic Versioning].
+
+[Keep a Changelog]:
+https://keepachangelog.com/en/1.0.0/
+[Semantic Versioning]:
+https://semver.org/spec/v2.0.0.html
+
 
 ## [Unreleased]
 
 ### Added
 - Initial support for Python 3.11.
+
+### Changed
+- Ensure that `--disable-shared` is set in `PYTHON_CONFIGURE_OPTS` when
+  building Python (this default switch was removed in `pyenv` 2.3.10).
+
+### Fixed
+- Fix output of `pmm system kernel-version` when using `buildkit`.
+- Include segfault patches for Python 3.1-3.3 builds with GCC 10+.
+- Improve traceback in stdout when `pyenv install` fails.
 
 ## [0.6.0] - 2022-01-18
 
