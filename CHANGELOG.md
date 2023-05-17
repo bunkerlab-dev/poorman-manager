@@ -18,6 +18,7 @@ https://semver.org/spec/v2.0.0.html
 ### Changed
 - Ensure that `--disable-shared` is set in `PYTHON_CONFIGURE_OPTS` when
   building Python (this default switch was removed in `pyenv` 2.3.10).
+- Update `numpy` upper limit for latest Python versions.
 
 ### Fixed
 - Fix output of `pmm system kernel-version` when using `buildkit`.
