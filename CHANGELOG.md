@@ -17,7 +17,7 @@ https://semver.org/spec/v2.0.0.html
 
 ### Changed
 - Ensure that `--disable-shared` is set in `PYTHON_CONFIGURE_OPTS` when
-  building Python (this default switch was removed in `pyenv` 2.3.10).
+  building Python (this default switch was removed in PyEnv 2.3.10).
 - Update `numpy` upper limit for latest Python versions.
 - Update `pip` upper limit for latest Python versions.
 - Update `scipy` upper limit for latest Python versions.
@@ -35,15 +35,15 @@ https://semver.org/spec/v2.0.0.html
 - Support to build custom versions of `perl`.
 
 ### Changed
-- Force Python to be built with newer OpenSSL if possible, even if a newer
-  `perl` needs to be built on-the-fly.
+- Force Python to be built with newer OpenSSL if possible, even if a
+  newer `perl` needs to be built on-the-fly.
 - Update `wheel` upper limit for latest Python versions.
 
 ### Fixed
 - Fix `LDFLAGS` when linking custom SQLite and xz-utils during Python
   installation on openSUSE and `amd64`.
-- Fix configure call for OpenSSL 1.1.1 series in very ancient Debian images.
-- Prevent `pyenv init --path` being called more than once in PyEnv profile.
+- Fix configure call for OpenSSL 1.1.1 series in ancient Debian images.
+- Ensure `pyenv init --path` is called only once in PyEnv profile.
 
 ## [0.5.0] - 2022-01-03
 
@@ -70,8 +70,8 @@ https://semver.org/spec/v2.0.0.html
 ### Changed
 - Remove system `xz-utils` as `pyenv-dev` dependency and instead compile
   `xz-utils` from source when compiling Python 3.3+.
-- Remove system `libsqlite3-dev` as `pyenv-dev` dependency and instead compile
-  SQLite from source.
+- Remove system `libsqlite3-dev` as `pyenv-dev` dependency and instead
+  compile SQLite from source.
 
 ### Removed
 - Remove `tk-dev` and `xz-utils` for `pyenv-dev` in Debian-like systems.
@@ -89,38 +89,39 @@ https://semver.org/spec/v2.0.0.html
 - Rename main executables from `manager` to `pmm`.
 - Move `poorman-manager` files to `bin` folder.
 - Move OS information from command `pmm-info` to `pmm-system`.
-- Modify handling of Python patches during installation so that it will be
-  easier to append custom patches to those provided by PyEnv.
-- Change default package manager in Debian 4.0 from `apt-get` to `aptitude` if
-  `aptitude` is found in the system.
-- Enforce OpenSSL 1.0.2 in Python versions that expect OpenSSL 1.1.1 when the
-  system Perl version is too old to compile OpenSSL 1.1.1.
-- Remove system `libffi-dev` as `pyenv-dev` dependency and instead compile
-  `ffi` from source when compiling Python 3.6+.
+- Modify handling of Python patches during installation so that it will
+  be easier to append custom patches to those provided by PyEnv.
+- Change default package manager in Debian 4.0 from `apt-get` to
+  `aptitude` if `aptitude` is found in the system.
+- Enforce OpenSSL 1.0.2 in Python versions that expect OpenSSL 1.1.1
+  when the system Perl version is too old to compile OpenSSL 1.1.1.
+- Remove system `libffi-dev` as `pyenv-dev` dependency and instead
+  compile `ffi` from source when compiling Python 3.6+.
 
 ### Fixed
-- Check `pip` version before using `--no-cache-dir` (elder versions do not have
-  this option).
-- Fix Python `_decimal` not being built for Python 3.3+ when using too old GCC.
+- Check `pip` version before using `--no-cache-dir` (elder versions do
+  not have this option).
+- Fix Python `_decimal` not being built for Python 3.3+ with old GCC.
 - Fix Python `_gdbm` and `_dbm` not being built for Python.
-- Fix Python `ossaudiodev` not being built for Python 2.6 and Python 3.1.
+- Fix Python `ossaudiodev` not being built for Python 2.6 and 3.1.
 - Fix Python `linuxaudiodev` not being built for Python 2.6.
-- Fix Python modules not being built for Python 3.2 (`ossaudiodev` for 3.2.0
-  and 3.2.1, `_posixsubprocess` for 3.2.3, `_sqlite3` for 3.2.4).
+- Fix Python modules not being built for Python 3.2 (`ossaudiodev` for
+  3.2.0 and 3.2.1, `_posixsubprocess` for 3.2.3, `_sqlite3` for 3.2.4).
 
 ## [0.1.0] - 2021-08-02
 
 ### Added
 - Initial version of `poorman-manager`.
-- Basic commands to get OS information (e.g. package manager, distribution
-  name and version).
-- Basic features to handle package management (clean, install, remove, update).
-- Custom installation of OpenSSL 1.0.2 and 1.1.1, and possibility to enable
-  (and later disable) into `/usr/local/ssl`.
-- Custom installation of Python 2.6+ and 3.1+ by means of PyEnv and other
-  required preparation steps.
-- Automatic cleanup of Python installed environments right after installation
-  (e.g. byte-compiled files, test scripts).
+- Basic commands to get OS information (e.g. package manager,
+  distribution name and version).
+- Basic features to handle package management (e.g. clean, install,
+  remove, update).
+- Custom installation of OpenSSL 1.0.2 and 1.1.1, and possibility to
+  enable (and later disable) into `/usr/local/ssl`.
+- Custom installation of Python 2.6+ and 3.1+ by means of PyEnv and
+  other required preparation steps.
+- Automatic cleanup of Python installed environments right after
+  installation (e.g. byte-compiled files, test scripts).
 - Helper scripts to install Python packages through `pip` if available.
 
 
