@@ -16,6 +16,10 @@ https://semver.org/spec/v2.0.0.html
 - Initial support for Python 3.12.
 - Latest bugfix releases of Python 3.7, 3.8, 3.9, 3.10 and 3.11.
 
+### Changed
+- Update upper pins for `Cython`, `numpy`, `pip`, `scipy`, `setuptools`
+  and `wheel` to also support Python 3.12.
+
 ### Fixed
 - Change `xz-utils` download link temporarily to HTTP version to ensure
   that it works with `busybox-wget`.
