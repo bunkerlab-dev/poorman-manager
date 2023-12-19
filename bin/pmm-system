@@ -23,7 +23,7 @@ _system_kernel_version() {
             debian | ubuntu | trisquel)
                 pmm update 1>/dev/null 2>&1
                 version=$(apt-cache search linux-headers |
-                          grep -Ee 'linux-headers-[0-9\.]*-[0-9](-all)? ' |
+                          grep -Ee 'linux-headers-[0-9\.]*-[0-9]+(\..*)?(-all)? ' |
                           tail -n1 | cut -d' ' -f1 | cut -d'-' -f3)
                 if [ -z "${version}" ]; then
                     echo 1>&2 "W: Cannot find kernel version"
