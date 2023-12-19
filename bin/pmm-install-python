@@ -50,14 +50,15 @@ case ${version} in
         version_openssl=1.0.2
         export GET_PIP_URL=
     ;;
-    3.[5-9]|3.1[0-1]|\
+    3.[5-9]|3.1[0-2]|\
     3.5.[3-9]|3.5.10|\
     3.6.[0-9]|3.6.1[0-5]|\
     3.7.[0-9]|3.7.1[0-7]|\
-    3.8.[0-9]|3.8.1[0-7]|\
-    3.9.[0-9]|3.9.1[0-7]|\
-    3.10.[0-9]|3.10.1[0-2]|\
-    3.11.[0-4])
+    3.8.[0-9]|3.8.1[0-8]|\
+    3.9.[0-9]|3.9.1[0-8]|\
+    3.10.[0-9]|3.10.1[0-3]|\
+    3.11.[0-7]|\
+    3.12.[0-1])
         version_openssl=1.1.1
         export GET_PIP_URL=
     ;;
@@ -105,7 +106,7 @@ fi
 
 # Infer complete Python version if the user only gave major + minor.
 case ${version} in
-    2.[67]|3.[1-9]|3.1[0-1])
+    2.[67]|3.[1-9]|3.1[0-2])
         regex=$(echo "^\ \ ${version}.[0-9]\+$" | sed 's|\.|\\\.|g')
         version=$(pyenv install -l | grep "${regex}" | tail -n1 | xargs)
     ;;
@@ -141,7 +142,7 @@ fi
 # Install `xz` manually for Python 3.3 or greater.
 delete_xz=0
 case ${version} in
-    3.[3-9].*|3.1[0-1].*)
+    3.[3-9].*|3.1[0-2].*)
         if [ ! -d $(pmm info xz-utils-root) ]; then
             delete_xz=1
             pmm install xz-utils
@@ -158,7 +159,7 @@ esac
 # Install `libffi` manually for Python 3.6 or greater.
 delete_ffi=0
 case ${version} in
-    3.[6-9].*|3.1[0-1].*)
+    3.[6-9].*|3.1[0-2].*)
         if [ ! -d $(pmm info ffi-root) ]; then
             delete_ffi=1
             pmm install ffi
@@ -347,7 +348,7 @@ case ${version} in
             ;;
             esac
         ;;
-    3.[3-9].*|3.1[0-1].*)
+    3.[3-9].*|3.1[0-2].*)
         # Patch file for `_decimal` and old GNU GCC.
         {
             echo 'diff -r ../orig/Modules/_decimal/libmpdec/constants.c ./Modules/_decimal/libmpdec/constants.c'
@@ -370,7 +371,7 @@ case ${version} in
                 # Patch segfault when building with GCC 10+ on amd64.
                 if [ "$(pmm system os-arch)" = "amd64" ]; then
                     {
-                        echo 'diff -r ../orig/Objects/obmalloc.c ./Objects/obmalloc.c'
+                        echo "diff -r ../orig/Objects/obmalloc.c ./Objects/obmalloc.c"
                         echo "--- ../orig/Objects/obmalloc.c  2017-09-19 07:32:02"
                         echo "+++ ./Objects/obmalloc.c        2017-09-19 07:32:02"
                         echo "@@ -136,8 +136,8 @@"
@@ -387,7 +388,7 @@ case ${version} in
                     } >> "${patchfile}"
                 fi
             ;;
-            3.11.*)
+            3.1[12].*)
                 # Relax tests about having a working OpenSSL library.
                 export PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} ac_cv_working_openssl_hashlib=yes"
                 export PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} ac_cv_working_openssl_ssl=yes"

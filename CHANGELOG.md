@@ -13,8 +13,8 @@ https://semver.org/spec/v2.0.0.html
 ## [Unreleased]
 
 ### Added
-- Support for the latest bugfix releases of Python 3.7, 3.8, 3.9, 3.10
-  and 3.11.
+- Initial support for Python 3.12.
+- Latest bugfix releases of Python 3.7, 3.8, 3.9, 3.10 and 3.11.
 
 ### Fixed
 - Change `xz-utils` download link temporarily to HTTP version to ensure
