@@ -10,6 +10,19 @@ https://keepachangelog.com/en/1.0.0/
 https://semver.org/spec/v2.0.0.html
 
 
+## [Unreleased]
+
+### Added
+- Support for the latest bugfix releases of Python 3.7, 3.8, 3.9, 3.10
+  and 3.11.
+
+### Fixed
+- Change `xz-utils` download link temporarily to HTTP version to ensure
+  that it works with `busybox-wget`.
+- Fix `pmm info` outputs to also support Debian 10.
+- Fix `pmm system kernel-version` output missed for Debian 9 and 10 due
+  to invalid matching version regex.
+
 ## [0.7.0] - 2023-05-17
 
 ### Added
