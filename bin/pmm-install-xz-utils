@@ -18,9 +18,9 @@ if [ $# -ne 0 ]; then
     exit 1
 fi
 
-# Define remote url and installation prefix.
+# Define remote url and installation prefix (it should use HTTPS).
 version="5.2.5"
-remote="https://netcologne.dl.sourceforge.net/project/lzmautils"
+remote="http://netcologne.dl.sourceforge.net/project/lzmautils"
 pkgname="xz-${version}"
 pkgfile="${pkgname}.tar.gz"
 prefix=$(pmm info xz-utils-root)
