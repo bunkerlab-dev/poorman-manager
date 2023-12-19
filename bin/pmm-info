@@ -61,7 +61,7 @@ _info_hdf5() {
         debian-9*)
             echo "libhdf5-100 libhdf5-dev"
         ;;
-        ubuntu-* | trisquel-*)
+        debian-* | ubuntu-* | trisquel-*)
             echo "libhdf5-103 libhdf5-dev"
         ;;
         centos-*)
@@ -145,6 +145,9 @@ _info_netcdf4() {
         debian-9*)
             echo "libnetcdf11 libnetcdf-dev"
         ;;
+        debian-10*)
+            echo "libnetcdf13 libnetcdf-dev"
+        ;;
         ubuntu-* | trisquel-*)
             echo "libnetcdf15 libnetcdf-dev"
         ;;
@@ -168,7 +171,7 @@ _info_matplotlib_dev() {
         debian-[456].0* | debian-[78]*)
             echo "libfreetype6-dev libpng12-dev"
         ;;
-        debian-9*)
+        debian-9* | debian-10*)
             echo "libfreetype6-dev libpng-dev"
         ;;
         ubuntu-* | trisquel-*)
@@ -244,11 +247,11 @@ _info_gcc_full() {
                 perl-modules                                                  \
             " | xargs
         ;;
-        debian-[56].0* | debian-7* | debian-9* | ubuntu-* | trisquel-*)
-            echo "binutils gcc g++ gfortran"
-        ;;
         debian-8*)
             echo "binutils cpp-4.9 gcc-4.9 g++-4.9 gfortran-4.9"
+        ;;
+        debian-[56].0* | debian-7* | debian-9* | debian-10* | ubuntu-* | trisquel-*)
+            echo "binutils gcc g++ gfortran"
         ;;
         centos-*)
             echo "binutils gcc gcc-c++ gcc-gfortran"
@@ -290,7 +293,7 @@ _info_libffi() {
         debian-[56].0* | debian-7* | ubuntu-8.10* | ubuntu-9.* | ubuntu-10.* | ubuntu-11.04*)
             echo "libffi5"
         ;;
-        debian-8* | debian-9* | ubuntu-11.10* | ubuntu-1[2-9].* | trisquel-*)
+        debian-8* | debian-9* | debian-10* | ubuntu-11.10* | ubuntu-1[2-9].* | trisquel-*)
             echo "libffi6"
         ;;
         ubuntu-2[01].*)
@@ -339,6 +342,14 @@ _info_pyenv_dev() {
                 dpkg-dev make ncurses-bin perl perl-modules-5.24              \
                 libncursesw5-dev libreadline-dev                              \
                 libdb-dev libgdbm3 libgdbm-dev                                \
+            " | xargs
+        ;;
+        debian-10*)
+            echo "
+                build-essential bzip2 zlib1g-dev libbz2-dev xz-utils          \
+                dpkg-dev make ncurses-bin perl perl-modules-5.28              \
+                libncursesw5-dev libreadline-dev                              \
+                libdb-dev libgdbm6 libgdbm-dev                                \
             " | xargs
         ;;
         debian-* | ubuntu-* | trisquel-*)
