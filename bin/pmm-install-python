@@ -50,14 +50,15 @@ case ${version} in
         version_openssl=1.0.2
         export GET_PIP_URL=
     ;;
-    3.[5-9]|3.1[0-1]|\
+    3.[5-9]|3.1[0-2]|\
     3.5.[3-9]|3.5.10|\
     3.6.[0-9]|3.6.1[0-5]|\
     3.7.[0-9]|3.7.1[0-7]|\
-    3.8.[0-9]|3.8.1[0-7]|\
-    3.9.[0-9]|3.9.1[0-7]|\
-    3.10.[0-9]|3.10.1[0-2]|\
-    3.11.[0-4])
+    3.8.[0-9]|3.8.1[0-8]|\
+    3.9.[0-9]|3.9.1[0-8]|\
+    3.10.[0-9]|3.10.1[0-3]|\
+    3.11.[0-7]|\
+    3.12.[0-1])
         version_openssl=1.1.1
         export GET_PIP_URL=
     ;;
@@ -105,7 +106,7 @@ fi
 
 # Infer complete Python version if the user only gave major + minor.
 case ${version} in
-    2.[67]|3.[1-9]|3.1[0-1])
+    2.[67]|3.[1-9]|3.1[0-2])
         regex=$(echo "^\ \ ${version}.[0-9]\+$" | sed 's|\.|\\\.|g')
         version=$(pyenv install -l | grep "${regex}" | tail -n1 | xargs)
     ;;
@@ -141,7 +142,7 @@ fi
 # Install `xz` manually for Python 3.3 or greater.
 delete_xz=0
 case ${version} in
-    3.[3-9].*|3.1[0-1].*)
+    3.[3-9].*|3.1[0-2].*)
         if [ ! -d $(pmm info xz-utils-root) ]; then
             delete_xz=1
             pmm install xz-utils
@@ -158,7 +159,7 @@ esac
 # Install `libffi` manually for Python 3.6 or greater.
 delete_ffi=0
 case ${version} in
-    3.[6-9].*|3.1[0-1].*)
+    3.[6-9].*|3.1[0-2].*)
         if [ ! -d $(pmm info ffi-root) ]; then
             delete_ffi=1
             pmm install ffi
@@ -347,7 +348,7 @@ case ${version} in
             ;;
             esac
         ;;
-    3.[3-9].*|3.1[0-1].*)
+    3.[3-9].*|3.1[0-2].*)
         # Patch file for `_decimal` and old GNU GCC.
         {
             echo 'diff -r ../orig/Modules/_decimal/libmpdec/constants.c ./Modules/_decimal/libmpdec/constants.c'
@@ -370,7 +371,7 @@ case ${version} in
                 # Patch segfault when building with GCC 10+ on amd64.
                 if [ "$(pmm system os-arch)" = "amd64" ]; then
                     {
-                        echo 'diff -r ../orig/Objects/obmalloc.c ./Objects/obmalloc.c'
+                        echo "diff -r ../orig/Objects/obmalloc.c ./Objects/obmalloc.c"
                         echo "--- ../orig/Objects/obmalloc.c  2017-09-19 07:32:02"
                         echo "+++ ./Objects/obmalloc.c        2017-09-19 07:32:02"
                         echo "@@ -136,8 +136,8 @@"
@@ -387,7 +388,7 @@ case ${version} in
                     } >> "${patchfile}"
                 fi
             ;;
-            3.11.*)
+            3.1[12].*)
                 # Relax tests about having a working OpenSSL library.
                 export PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} ac_cv_working_openssl_hashlib=yes"
                 export PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} ac_cv_working_openssl_ssl=yes"
@@ -440,6 +441,156 @@ case ${version} in
                             echo ' '
                         ;;
                     esac
+
+                    echo 'diff -r ../orig/Objects/typeobject.c ./Objects/typeobject.c'
+                    echo '--- ../orig/Objects/typeobject.c  2023-12-07 20:45:44'
+                    echo '+++ ./Objects/typeobject.c        2023-12-18 11:26:07'
+                    echo '@@ -21,6 +21,10 @@'
+                    echo ' #include <ctype.h>'
+                    echo ' #include <stddef.h>               // ptrdiff_t'
+                    echo ' '
+                    echo '+#ifndef _Alignof'
+                    echo '+#define _Alignof(x) sizeof(x)'
+                    echo '+#endif'
+                    echo '+'
+                    echo ' /*[clinic input]'
+                    echo ' class type "PyTypeObject *" "&PyType_Type"'
+                    echo ' class object "PyObject *" "&PyBaseObject_Type"'
+                    echo ''
+
+                    echo 'diff -r ../orig/Modules/_testcapi/heaptype_relative.c ./Modules/_testcapi/heaptype_relative.c'
+                    echo '--- ../orig/Modules/_testcapi/heaptype_relative.c  2023-12-07 20:45:44'
+                    echo '+++ ./Modules/_testcapi/heaptype_relative.c        2023-12-19 22:09:26'
+                    echo '@@ -3,6 +3,10 @@'
+                    echo ' #include <stddef.h>               // max_align_t'
+                    echo ' #include <string.h>               // memset'
+                    echo ' '
+                    echo '+#ifndef _Alignof'
+                    echo '+#define _Alignof(x) sizeof(x)'
+                    echo '+#endif'
+                    echo '+'
+                    echo ' #ifdef LIMITED_API_AVAILABLE'
+                    echo ' '
+                    echo ' static PyType_Slot empty_slots[] = {'
+                    echo ''
+
+                    echo 'diff -r ../orig/Python/asm_trampoline.S ./Python/asm_trampoline.S'
+                    echo '--- ../orig/Python/asm_trampoline.S  2023-12-07 20:45:44'
+                    echo '+++ ./Python/asm_trampoline.S        2023-12-18 11:42:56'
+                    echo '@@ -1,12 +1,5 @@'
+                    echo '     .text'
+                    echo '     .globl	_Py_trampoline_func_start'
+                    echo '-# The following assembly is equivalent to:'
+                    echo '-# PyObject *'
+                    echo '-# trampoline(PyThreadState *ts, _PyInterpreterFrame *f,'
+                    echo '-#            int throwflag, py_evaluator evaluator)'
+                    echo '-# {'
+                    echo '-#     return evaluator(ts, f, throwflag);'
+                    echo '-# }'
+                    echo ' _Py_trampoline_func_start:'
+                    echo ' #ifdef __x86_64__'
+                    echo '     sub    $8, %rsp'
+                    echo ''
+
+                    echo 'diff -r ../orig/Include/internal/pycore_object.h ./Include/internal/pycore_object.h'
+                    echo '--- ../orig/Include/internal/pycore_object.h  2023-12-07 20:45:44'
+                    echo '+++ ./Include/internal/pycore_object.h        2023-12-19 21:23:52'
+                    echo '@@ -25,8 +25,8 @@'
+                    echo ' #define _PyObject_HEAD_INIT(type)         \'
+                    echo '     {                                     \'
+                    echo '         _PyObject_EXTRA_INIT              \'
+                    echo '-        .ob_refcnt = _Py_IMMORTAL_REFCNT, \'
+                    echo '-        .ob_type = (type)                 \'
+                    echo '+        { .ob_refcnt = _Py_IMMORTAL_REFCNT }, \'
+                    echo '+        .ob_type = (type)                 \'
+                    echo '     },'
+                    echo ' #define _PyVarObject_HEAD_INIT(type, size)    \'
+                    echo '     {                                         \'
+                    echo ''
+
+                    echo 'diff -r ../orig/Tools/build/deepfreeze.py ./Tools/build/deepfreeze.py'
+                    echo '--- ../orig/Tools/build/deepfreeze.py  2023-12-07 20:45:44'
+                    echo '+++ ./Tools/build/deepfreeze.py        2023-12-20 08:24:56'
+                    echo '@@ -142,7 +142,7 @@'
+                    echo ' '
+                    echo '     def object_head(self, typename: str) -> None:'
+                    echo '         with self.block(".ob_base =", ","):'
+                    echo '-            self.write(f".ob_refcnt = _Py_IMMORTAL_REFCNT,")'
+                    echo '+            self.write(f"{{ .ob_refcnt = _Py_IMMORTAL_REFCNT }},")'
+                    echo '             self.write(f".ob_type = &{typename},")'
+                    echo ' '
+                    echo '     def object_var_head(self, typename: str, size: int) -> None:'
+                    echo ''
+
+                    echo 'diff -r ../orig/Python/instrumentation.c ./Python/instrumentation.c'
+                    echo '--- ../orig/Python/instrumentation.c  2023-12-07 20:45:44'
+                    echo '+++ ./Python/instrumentation.c        2023-12-19 11:31:50'
+                    echo '@@ -18,13 +18,13 @@'
+                    echo ' '
+                    echo ' PyObject _PyInstrumentation_DISABLE ='
+                    echo ' {'
+                    echo '-    .ob_refcnt = _Py_IMMORTAL_REFCNT,'
+                    echo '+    { .ob_refcnt = _Py_IMMORTAL_REFCNT },'
+                    echo '     .ob_type = &PyBaseObject_Type'
+                    echo ' };'
+                    echo ' '
+                    echo ' PyObject _PyInstrumentation_MISSING ='
+                    echo ' {'
+                    echo '-    .ob_refcnt = _Py_IMMORTAL_REFCNT,'
+                    echo '+    { .ob_refcnt = _Py_IMMORTAL_REFCNT },'
+                    echo '     .ob_type = &PyBaseObject_Type'
+                    echo ' };'
+                    echo ' '
+                    echo ''
+
+                    echo 'diff -r ../orig/Modules/_asynciomodule.c ./Modules/_asynciomodule.c'
+                    echo '--- ../orig/Modules/_asynciomodule.c  2023-12-07 20:45:44'
+                    echo '+++ ./Modules/_asynciomodule.c        2023-12-19 21:59:42'
+                    echo '@@ -1580,10 +1580,10 @@'
+                    echo ' '
+                    echo ' /*********************** Future Iterator **************************/'
+                    echo ' '
+                    echo '-typedef struct futureiterobject {'
+                    echo '+struct futureiterobject {'
+                    echo '     PyObject_HEAD'
+                    echo '     FutureObj *future;'
+                    echo '-} futureiterobject;'
+                    echo '+};'
+                    echo ' '
+                    echo ' '
+                    echo ' static void'
+                    echo ''
+
+                    echo 'diff -r ../orig/Modules/_hacl/include/krml/lowstar_endianness.h ./Modules/_hacl/include/krml/lowstar_endianness.h'
+                    echo '--- ../orig/Modules/_hacl/include/krml/lowstar_endianness.h  2023-12-07 20:45:44'
+                    echo '+++ ./Modules/_hacl/include/krml/lowstar_endianness.h        2023-12-20 19:28:15'
+                    echo '@@ -6,13 +6,23 @@'
+                    echo ' '
+                    echo ' #include <string.h>'
+                    echo ' #include <inttypes.h>'
+                    echo '+#ifdef __linux__'
+                    echo '+    #include <linux/version.h>'
+                    echo '+    #define __BYTE_ORDER__          __BYTE_ORDER'
+                    echo '+    #define __ORDER_BIG_ENDIAN__    __BIG_ENDIAN'
+                    echo '+    #define __ORDER_LITTLE_ENDIAN__ __LITTLE_ENDIAN'
+                    echo '+#else'
+                    echo '+    #define LINUX_VERSION_CODE 0'
+                    echo '+    #define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))'
+                    echo '+#endif'
+                    echo ' '
+                    echo ' /******************************************************************************/'
+                    echo ' /* Implementing C.fst (part 2: endian-ness macros)                            */'
+                    echo ' /******************************************************************************/'
+                    echo ' '
+                    echo ' /* ... for Linux */'
+                    echo '-#if defined(__linux__) || defined(__CYGWIN__) || defined (__USE_SYSTEM_ENDIAN_H__) || defined(__GLIBC__)'
+                    echo '+#if (defined(__linux__) && defined(__GLIBC__) && LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32)) || \'
+                    echo '+    (defined(__CYGWIN__) || defined(__USE_SYSTEM_ENDIAN_H__))'
+                    echo ' #  include <endian.h>'
+                    echo ' '
+                    echo ' /* ... for OSX */'
+                    echo ''
+
                 } >> "${patchfile}"
             ;;
         esac
@@ -452,7 +603,7 @@ fi
 # Prepare environment variables before installing Python.
 pmm enable ${package_openssl}
 export TMPDIR="${tmpdir}"
-export CFLAGS="${CFLAGS} -I/usr/local/ssl/include"
+export CFLAGS="${CFLAGS} -I/usr/local/ssl/include -I/usr/include/ncursesw"
 export LDFLAGS="${LDFLAGS} -L/usr/local/ssl/lib"
 export PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} --disable-shared"
 

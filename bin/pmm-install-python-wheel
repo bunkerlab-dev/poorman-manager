@@ -59,8 +59,8 @@ case ${pyversion} in
     3.5|3.6)
         maxversion=0.38
     ;;
-    3.7|3.8|3.9|3.10|3.11)
-        maxversion=0.41
+    3.7|3.8|3.9|3.10|3.11|3.12)
+        maxversion=0.43
     ;;
     *)
         echo 1>&2 "E: unsupported Python version: '${pyversion}'"
