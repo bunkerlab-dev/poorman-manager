@@ -13,10 +13,7 @@ alias pmm="sh ${here}/pmm"
 
 
 _system_kernel_version() {
-    if [ -z "$(grep /proc/1/cgroup -Ee 'docker|buildkit|containerd\.service')" ]; then
-        # We are not inside Docker.
-        echo "$(uname -r | cut -d'-' -f1)"
-    else
+    if [ "$(cat /proc/1/cgroup)" = "0::/" -o ! -z "$(grep /proc/1/cgroup -Ee 'docker|buildkit|containerd\.service')" ]; then
         # We are inside Docker.
         os_name="$(_system_os_name)"
         case "${os_name}" in
@@ -36,6 +33,9 @@ _system_kernel_version() {
                 echo ""
             ;;
         esac
+    else
+        # We are not inside Docker.
+        echo "$(uname -r | cut -d'-' -f1)"
     fi
 }
 
