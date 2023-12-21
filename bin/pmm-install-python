@@ -409,22 +409,7 @@ case ${version} in
                     echo ' '
                     echo ' '
                     case ${version} in
-                        3.11.[0-3])
-                            echo '@@ -24977,12 +24977,8 @@'
-                            echo '         if test "$py_cv_module__sqlite3" != "n/a"; then :'
-                            echo ' '
-                            echo '     if test "$have_sqlite3" = "yes"; then :'
-                            echo '-  if test "$have_supported_sqlite3" = "yes"; then :'
-                            echo '   py_cv_module__sqlite3=yes'
-                            echo ' else'
-                            echo '-  py_cv_module__sqlite3=missing'
-                            echo '-fi'
-                            echo '-else'
-                            echo '   py_cv_module__sqlite3=disabled'
-                            echo ' fi'
-                            echo ' '
-                        ;;
-                        *)
+                        3.11.[4-6])
                             echo '@@ -28094,13 +28094,8 @@'
                             echo ' '
                             echo '     if test "$have_sqlite3" = "yes"'
@@ -436,6 +421,21 @@ case ${version} in
                             echo '-  py_cv_module__sqlite3=missing'
                             echo '-fi'
                             echo '-else $as_nop'
+                            echo '   py_cv_module__sqlite3=disabled'
+                            echo ' fi'
+                            echo ' '
+                        ;;
+                        3.11.*)  # Python 3.11.0-3.11.3 and 3.11.7+.
+                            echo '@@ -24977,12 +24977,8 @@'
+                            echo '         if test "$py_cv_module__sqlite3" != "n/a"; then :'
+                            echo ' '
+                            echo '     if test "$have_sqlite3" = "yes"; then :'
+                            echo '-  if test "$have_supported_sqlite3" = "yes"; then :'
+                            echo '   py_cv_module__sqlite3=yes'
+                            echo ' else'
+                            echo '-  py_cv_module__sqlite3=missing'
+                            echo '-fi'
+                            echo '-else'
                             echo '   py_cv_module__sqlite3=disabled'
                             echo ' fi'
                             echo ' '
