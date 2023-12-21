@@ -19,6 +19,7 @@ https://semver.org/spec/v2.0.0.html
 ### Changed
 - Update upper pins for `Cython`, `numpy`, `pip`, `scipy`, `setuptools`
   and `wheel` to also support Python 3.12.
+- Remove `ensurepip` from Python installations after build step.
 
 ### Fixed
 - Change `xz-utils` download link temporarily to HTTP version to ensure

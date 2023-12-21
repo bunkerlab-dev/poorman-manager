@@ -607,7 +607,7 @@ pmm enable ${package_openssl}
 export TMPDIR="${tmpdir}"
 export CFLAGS="${CFLAGS} -I/usr/local/ssl/include -I/usr/include/ncursesw"
 export LDFLAGS="${LDFLAGS} -L/usr/local/ssl/lib"
-export PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} --disable-shared"
+export PYTHON_CONFIGURE_OPTS="${PYTHON_CONFIGURE_OPTS} --disable-shared --without-ensurepip"
 
 # Install the specific Python version.
 set +e
@@ -641,6 +641,9 @@ rm -rf ${pydir}/lib/*/lib-dynload/_xxtestfuzz*.so
 
 # Remove Python static stuff.
 find "${pydir}/lib" -type f -name "libpython*.a" | xargs rm -rf
+
+# Remove ensurepip stuff.
+find "${pydir}/lib" -type d -name "ensurepip" | xargs rm -rf
 
 # Remove IDLE.
 find "${pydir}/bin" -name "idle*" | xargs rm -rf
