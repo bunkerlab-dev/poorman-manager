@@ -409,7 +409,7 @@ case ${version} in
                     echo ' '
                     echo ' '
                     case ${version} in
-                        3.11.[4-6])
+                        3.11.4|3.12.*)
                             echo '@@ -28094,13 +28094,8 @@'
                             echo ' '
                             echo '     if test "$have_sqlite3" = "yes"'
@@ -425,7 +425,7 @@ case ${version} in
                             echo ' fi'
                             echo ' '
                         ;;
-                        3.11.*)  # Python 3.11.0-3.11.3 and 3.11.7+.
+                        3.11.*)
                             echo '@@ -24977,12 +24977,8 @@'
                             echo '         if test "$py_cv_module__sqlite3" != "n/a"; then :'
                             echo ' '
