@@ -1,21 +1,22 @@
 # poorman-manager
 
-This tool is a set of scripts to make easier to install Python under GNU/Linux
-x86 and x86_64. The tool includes:
+This tool is a set of scripts to make easier to install Python under
+GNU/Linux x86 and x86_64. The tool includes:
 * Access to basic OS information.
-* Common interface to use the different package managers across GNU/Linux
-  distributions (e.g. install, remove, update, clean).
-* Custom scripts to compile certain libraries from source (e.g. FFI, OpenSSL,
-  SQLite).
+* Common interface to use the different package managers across
+  GNU/Linux distributions (e.g. install, remove, update, clean).
+* Custom scripts to compile certain libraries from source (e.g. FFI,
+  OpenSSL, SQLite).
 * Thin wrapper around PyEnv to install Python versions, including:
-  * all the preparation steps before calling `pyenv install` successfully, and
+  * all the preparation steps before calling `pyenv install`
+    successfully, and
   * some cleanup after Python installation.
 
-The tool adds a special focus in keeping the system as light as possible after
-each command, since it is mainly used to build Docker images. This means that
-it constantly takes care of removing unneeded files and folders (e.g. cache
-and temporary files), so please **use it with caution** if you try it in your
-personal computer.
+The tool adds a special focus in keeping the system as light as possible
+after each command, since it is mainly used to build Docker images. This
+means that it constantly takes care of removing unneeded files and
+folders (e.g. cache and temporary files), so please **use it with
+caution** if you try it in your personal computer.
 
 ## Usage
 
