@@ -201,6 +201,62 @@ patchfile="${tmpdir}/python-${version}.patch"
 patchfold="${defdir}/patches/${version}/Python-$(echo ${version} | sed 's|\(.*\)\.0$|\1|')"
 touch "${patchfile}"
 case ${version} in
+    2.6.[0-5])
+        # Patch segfault when building with GCC 8+ on amd64.
+        if [ "$(pmm system os-arch)" = "amd64" ]; then
+            {
+                echo 'diff -r ../orig/Include/objimpl.h ./Include/objimpl.h'
+                echo '--- ../orig/Include/objimpl.h  2013-10-29 16:04:37'
+                echo '+++ ./Include/objimpl.h        2013-10-29 16:04:37'
+                echo '@@ -248,7 +248,7 @@ typedef union _gc_head {'
+                echo ' 		union _gc_head *gc_prev;'
+                echo ' 		Py_ssize_t gc_refs;'
+                echo ' 	} gc;'
+                echo '-	long double dummy;  /* force worst-case alignment */'
+                echo '+	double dummy;  /* force worst-case alignment */'
+                echo ' } PyGC_Head;'
+                echo ' '
+                echo ' extern PyGC_Head *_PyGC_generation0;'
+            } >> "${patchfile}"
+        fi
+        case ${version} in
+            2.6.[0-4])
+                {
+                    echo 'diff -r ../orig/Objects/bytearrayobject.c.orig ./Objects/bytearrayobject.c'
+                    echo '--- ../orig/Objects/bytearrayobject.c.orig  2009-09-06 10:33:12'
+                    echo '+++ ./Objects/bytearrayobject.c             2009-09-06 10:33:12'
+                    echo '@@ -6,6 +6,7 @@'
+                    echo ' #include "bytes_methods.h"'
+                    echo ' '
+                    echo ' static PyByteArrayObject *nullbytes = NULL;'
+                    echo '+char _PyByteArray_empty_string[] = "";'
+                    echo ' '
+                    echo ' void'
+                    echo ' PyByteArray_Fini(void)'
+                    echo ''
+                } >> "${patchfile}"
+            ;;
+        esac
+    ;;
+    2.6.[6-9])
+        # Patch segfault when building with GCC 8+ on amd64.
+        if [ "$(pmm system os-arch)" = "amd64" ]; then
+            {
+                echo 'diff -r ../orig/Include/objimpl.h ./Include/objimpl.h'
+                echo '--- ../orig/Include/objimpl.h  2013-10-29 16:04:37'
+                echo '+++ ./Include/objimpl.h        2013-10-29 16:04:37'
+                echo '@@ -248,7 +248,7 @@ typedef union _gc_head {'
+                echo '         union _gc_head *gc_prev;'
+                echo '         Py_ssize_t gc_refs;'
+                echo '     } gc;'
+                echo '-    long double dummy;  /* force worst-case alignment */'
+                echo '+    double dummy;  /* force worst-case alignment */'
+                echo ' } PyGC_Head;'
+                echo ' '
+                echo ' extern PyGC_Head *_PyGC_generation0;'
+            } >> "${patchfile}"
+        fi
+    ;;
     3.[1-2].*)
         # Patch segfault when building with GCC 10+ on amd64.
         if [ "$(pmm system os-arch)" = "amd64" ]; then
@@ -346,8 +402,8 @@ case ${version} in
                     echo ' #endif'
                 } >> "${patchfile}"
             ;;
-            esac
-        ;;
+        esac
+    ;;
     3.[3-9].*|3.1[0-2].*)
         # Patch file for `_decimal` and old GNU GCC.
         {

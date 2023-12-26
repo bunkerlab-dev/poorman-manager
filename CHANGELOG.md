@@ -23,11 +23,13 @@ https://semver.org/spec/v2.0.0.html
 - Modify `--openssldir` build switch from "${prefix}/ssl" to "/etc/ssl".
 
 ### Fixed
-- Change `xz-utils` download link temporarily to HTTP version to ensure
-  that it works with `busybox-wget`.
+- Include segfault patches for Python 2.6 builds with GCC 8+.
+- Backport `_PyByteArray_empty_string` symbol for Python 2.6.0-2.6.4.
 - Fix `pmm info` outputs to also support Debian 10.
 - Fix `pmm system kernel-version` output missed for Debian 9 and 10 due
   to invalid matching version regex.
+- Change `xz-utils` download link temporarily to HTTP version to ensure
+  that it works with `busybox-wget`.
 
 ## [0.7.0] - 2023-05-17
 
