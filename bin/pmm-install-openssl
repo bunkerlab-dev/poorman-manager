@@ -96,11 +96,11 @@ cd ${pkgname}
 if [ ! -z "${archopts}" ]; then
     perl ./Configure                                                          \
         ${archopts}                                                           \
-        --prefix=${prefix} --openssldir=${prefix}/ssl                         \
+        --prefix=${prefix} --openssldir=/etc/ssl                              \
         -fPIC no-shared -Wa,--noexecstack ${extraflags} 1>${tmplog} 2>&1
 else
     perl ./config                                                             \
-        --prefix=${prefix} --openssldir=${prefix}/ssl                         \
+        --prefix=${prefix} --openssldir=/etc/ssl                              \
         -fPIC no-shared -Wa,--noexecstack ${extraflags} 1>${tmplog} 2>&1
 fi
 
