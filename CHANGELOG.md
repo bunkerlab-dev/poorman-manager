@@ -10,7 +10,7 @@ https://keepachangelog.com/en/1.0.0/
 https://semver.org/spec/v2.0.0.html
 
 
-## [Unreleased]
+## [0.8.0] - 2023-12-26
 
 ### Added
 - Initial support for Python 3.12.
@@ -147,7 +147,9 @@ https://semver.org/spec/v2.0.0.html
 
 
 [Unreleased]:
-https://github.com/molinav/poorman-manager/compare/v0.7.0...master
+https://github.com/molinav/poorman-manager/compare/v0.8.0...master
+[0.8.0]:
+https://github.com/molinav/poorman-manager/compare/v0.7.0...v0.8.0
 [0.7.0]:
 https://github.com/molinav/poorman-manager/compare/v0.6.0...v0.7.0
 [0.6.0]:
